@@ -1,0 +1,206 @@
+/* ── Venue Detail ─────────────────────────────────────────────────────────── */
+.page-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  font-family: var(--ff-serif);
+  font-size: var(--fs-xl);
+  color: var(--clr-muted);
+}
+
+.vd-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: var(--sp-12);
+  align-items: start;
+}
+
+.vd-section-title {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-2xl);
+  font-weight: 400;
+  color: var(--clr-text);
+  margin-bottom: var(--sp-4);
+  margin-top: var(--sp-8);
+}
+
+.vd-section-title:first-child { margin-top: 0; }
+
+.vd-desc {
+  font-size: var(--fs-md);
+  color: var(--clr-body);
+  line-height: 1.8;
+  margin-bottom: var(--sp-8);
+}
+
+/* Meta strip */
+.vd-meta-strip {
+  display: flex;
+  gap: var(--sp-1);
+  background: var(--clr-surface-alt);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--r-lg);
+  margin-bottom: var(--sp-10);
+  overflow: hidden;
+}
+
+.vd-meta-item {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-5) var(--sp-6);
+  flex: 1;
+  border-right: 1px solid var(--clr-border);
+}
+
+.vd-meta-item:last-child { border-right: none; }
+
+.vd-meta-icon { font-size: 1.4rem; }
+
+.vd-meta-label {
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--clr-muted);
+  margin-bottom: 2px;
+}
+
+.vd-meta-value {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  color: var(--clr-text);
+}
+
+/* Features */
+.vd-features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-8);
+}
+
+.vd-feature {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-base);
+  color: var(--clr-body);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border-lt);
+  border-radius: var(--r-md);
+}
+
+.vd-feature-icon {
+  color: var(--clr-gold);
+  font-size: 0.6rem;
+  flex-shrink: 0;
+}
+
+/* Sidebar */
+.vd-sidebar {
+  position: sticky;
+  top: calc(76px + var(--sp-6));
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.vd-booking-card {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--r-xl);
+  padding: var(--sp-6);
+  box-shadow: var(--shadow-md);
+}
+
+.vd-booking-card__title {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-xl);
+  font-weight: 500;
+  color: var(--clr-text);
+  margin-bottom: var(--sp-3);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--clr-border-lt);
+}
+
+.vd-booking-card__price {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-2xl);
+  font-weight: 600;
+  color: var(--clr-maroon);
+  margin-bottom: var(--sp-2);
+}
+
+.vd-booking-card__price span {
+  font-size: var(--fs-base);
+  color: var(--clr-muted);
+  font-weight: 400;
+}
+
+.vd-booking-card__note {
+  font-size: var(--fs-xs);
+  color: var(--clr-muted);
+  margin-bottom: var(--sp-5);
+  line-height: 1.5;
+}
+
+.vd-booking-card__features {
+  margin-top: var(--sp-5);
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--clr-border-lt);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.vd-booking-card__features p {
+  font-size: var(--fs-sm);
+  color: var(--clr-muted);
+}
+
+.vd-other-venues {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--r-xl);
+  padding: var(--sp-5) var(--sp-6);
+}
+
+.vd-other-venues h4 {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-base);
+  font-weight: 500;
+  color: var(--clr-text);
+  margin-bottom: var(--sp-4);
+  padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--clr-border-lt);
+}
+
+.vd-other-venues a {
+  display: block;
+  font-size: var(--fs-sm);
+  color: var(--clr-body);
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--clr-border-lt);
+  transition: color var(--tr-fast);
+}
+
+.vd-other-venues a:last-child { border-bottom: none; }
+.vd-other-venues a:hover { color: var(--clr-maroon); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .vd-grid {
+    grid-template-columns: 1fr;
+  }
+  .vd-sidebar { position: static; }
+  .vd-features { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 600px) {
+  .vd-meta-strip { flex-direction: column; }
+  .vd-meta-item { border-right: none; border-bottom: 1px solid var(--clr-border); }
+  .vd-meta-item:last-child { border-bottom: none; }
+}
