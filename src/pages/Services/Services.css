@@ -1,0 +1,209 @@
+/* ── Services Page ────────────────────────────────────────────────────────── */
+
+/* Filter bar */
+.services-filter {
+  background: var(--clr-surface);
+  border-bottom: 1px solid var(--clr-border);
+  padding-block: var(--sp-4);
+  position: sticky;
+  top: 76px;
+  z-index: 100;
+}
+
+.services-filter__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.services-filter__tab {
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--clr-body);
+  border: 1px solid var(--clr-border);
+  border-radius: 20px;
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--tr-fast);
+  white-space: nowrap;
+}
+
+.services-filter__tab:hover {
+  border-color: var(--clr-maroon);
+  color: var(--clr-maroon);
+  background: rgba(107,31,42,0.04);
+}
+
+.services-filter__tab--active {
+  background: var(--clr-maroon);
+  border-color: var(--clr-maroon);
+  color: #fff;
+}
+
+/* Services grid */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-6);
+}
+
+/* Service card */
+.svc-card {
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border-lt);
+  border-radius: var(--r-xl);
+  padding: var(--sp-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  transition: all var(--tr-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.svc-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--clr-maroon), var(--clr-gold));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--tr-base);
+}
+
+.svc-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--clr-border);
+}
+
+.svc-card:hover::before {
+  transform: scaleX(1);
+}
+
+.svc-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.svc-card__icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.svc-card__avail {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.svc-card__avail--green {
+  background: #D1F7E3;
+  color: #166534;
+}
+
+.svc-card__avail--amber {
+  background: #FFF3CD;
+  color: #856404;
+}
+
+.svc-card__category {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--clr-gold);
+}
+
+.svc-card__title {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-xl);
+  font-weight: 500;
+  color: var(--clr-text);
+  line-height: 1.2;
+}
+
+.svc-card__desc {
+  font-size: var(--fs-sm);
+  color: var(--clr-muted);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.svc-card__features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding-top: var(--sp-2);
+  border-top: 1px solid var(--clr-border-lt);
+}
+
+.svc-card__features li {
+  font-size: var(--fs-xs);
+  color: var(--clr-body);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-2);
+}
+
+.svc-card__features li span {
+  color: var(--clr-gold);
+  flex-shrink: 0;
+  font-size: 0.6rem;
+  margin-top: 3px;
+}
+
+.svc-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--clr-border-lt);
+  margin-top: auto;
+}
+
+.svc-card__price {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.svc-card__price-label {
+  font-size: var(--fs-xs);
+  color: var(--clr-muted);
+  letter-spacing: 0.04em;
+}
+
+.svc-card__price-amt {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  color: var(--clr-maroon);
+}
+
+.svc-card__cta {
+  white-space: nowrap;
+  font-size: var(--fs-xs);
+  padding: var(--sp-2) var(--sp-4);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .services-grid { grid-template-columns: 1fr; }
+  .services-filter { top: 0; }
+}

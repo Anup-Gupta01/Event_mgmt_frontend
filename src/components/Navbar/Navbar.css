@@ -146,6 +146,30 @@
   flex-shrink: 0;
 }
 
+.navbar__login-btn {
+  font-size: 0.8rem;
+  padding: var(--sp-2) var(--sp-4);
+  color: var(--clr-maroon);
+  border: 1.5px solid var(--clr-border);
+  border-radius: var(--r-sm);
+  transition: all var(--tr-base);
+}
+
+.navbar__login-btn:hover {
+  border-color: var(--clr-maroon);
+  background: var(--clr-surface-alt);
+}
+
+.navbar--transparent .navbar__login-btn {
+  color: rgba(255,255,255,0.85);
+  border-color: rgba(255,255,255,0.35);
+}
+
+.navbar--transparent .navbar__login-btn:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.7);
+}
+
 .navbar__cta {
   font-size: 0.8rem;
   padding: var(--sp-2) var(--sp-5);
@@ -161,6 +185,15 @@
 .navbar--transparent .navbar__cta:hover {
   background: var(--clr-maroon);
   border-color: var(--clr-maroon);
+}
+
+/* ── Mobile buttons row ───────────────────────────────────────────────────── */
+.navbar__mobile-btns {
+  display: flex;
+  gap: var(--sp-3);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 1px solid var(--clr-border-lt);
 }
 
 /* ── Hamburger ────────────────────────────────────────────────────────────── */

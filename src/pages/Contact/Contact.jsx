@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../About/About.css';
@@ -9,6 +9,38 @@ const API = 'http://localhost:5000';
 const eventTypes = ['Wedding', 'Corporate', 'Social Event', 'Exhibition', 'Birthday', 'Anniversary', 'Other'];
 const venueOptions = ['Darbar Hall', 'Jasmine Pavilion', 'Rooftop Terrace', 'Maharani Suite', 'Not sure yet'];
 
+const contactInfo = [
+  {
+    icon: '📍',
+    label: 'Our Address',
+    lines: ['Raj Mahal Palace & Events', 'Palace Road, Near City Palace', 'Jaipur, Rajasthan — 302 001'],
+  },
+  {
+    icon: '📞',
+    label: 'Phone',
+    lines: ['+91 141 234 5678', '+91 98765 43210 (Events)'],
+    href: 'tel:+911412345678',
+  },
+  {
+    icon: '💬',
+    label: 'WhatsApp',
+    lines: ['+91 98765 43210'],
+    href: 'https://wa.me/919876543210',
+    whatsapp: true,
+  },
+  {
+    icon: '✉️',
+    label: 'Email',
+    lines: ['events@rajmahal.in'],
+    href: 'mailto:events@rajmahal.in',
+  },
+  {
+    icon: '🕐',
+    label: 'Office Hours',
+    lines: ['Mon – Sat: 9:00 AM – 7:00 PM', 'Sunday: 10:00 AM – 4:00 PM', 'Public Holidays: By appointment'],
+  },
+];
+
 export default function Contact() {
   const [params] = useSearchParams();
   const [form, setForm] = useState({
@@ -16,8 +48,9 @@ export default function Contact() {
     eventType: '', venue: params.get('venue') || '',
     date: '', guestCount: '', message: '',
     package: params.get('package') || '',
+    service: params.get('service') || '',
   });
-  const [status, setStatus] = useState(null); // 'loading' | 'success' | 'error'
+  const [status, setStatus] = useState(null);
   const [error, setError] = useState('');
 
   const handle = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
@@ -37,6 +70,8 @@ export default function Contact() {
 
   return (
     <div>
+      <title>Contact Us — Raj Mahal</title>
+
       {/* Hero */}
       <div className="page-hero">
         <div className="page-hero__bg">
@@ -52,6 +87,29 @@ export default function Contact() {
         </div>
       </div>
 
+      {/* Quick contact bar */}
+      <div className="contact-quick-bar">
+        <div className="container">
+          <div className="contact-quick-bar__inner">
+            <a href="tel:+911412345678" className="contact-quick-bar__item">
+              <span>📞</span> <span>+91 141 234 5678</span>
+            </a>
+            <div className="contact-quick-bar__sep" />
+            <a href="https://wa.me/919876543210" target="_blank" rel="noreferrer" className="contact-quick-bar__item contact-quick-bar__item--wa">
+              <span>💬</span> <span>WhatsApp Us</span>
+            </a>
+            <div className="contact-quick-bar__sep" />
+            <a href="mailto:events@rajmahal.in" className="contact-quick-bar__item">
+              <span>✉️</span> <span>events@rajmahal.in</span>
+            </a>
+            <div className="contact-quick-bar__sep" />
+            <span className="contact-quick-bar__item contact-quick-bar__item--hours">
+              <span>🕐</span> <span>Mon–Sat: 9AM–7PM</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
       <section className="section">
         <div className="container">
           <div className="contact-grid">
@@ -59,14 +117,18 @@ export default function Contact() {
             {/* Form */}
             <div className="contact-form-wrap">
               <h2 className="contact-form-title">Event Enquiry Form</h2>
-              <p className="contact-form-sub">Our events team will respond within 24 hours. We offer complimentary venue tours by appointment.</p>
+              <p className="contact-form-sub">Our events team responds within 24 hours. Complimentary venue tours available by appointment.</p>
 
               {status === 'success' ? (
                 <div className="contact-success">
                   <span className="contact-success__icon">✓</span>
                   <h3>Your enquiry has been submitted!</h3>
                   <p>Thank you, <strong>{form.name.split(' ')[0]}</strong>. Our events team will be in touch within 24 hours. We look forward to making your occasion truly royal.</p>
-                  <button onClick={() => { setStatus(null); setForm(f => ({ ...f, name:'', email:'', phone:'', message:'' })); }} className="btn btn--secondary" style={{ marginTop: '1rem' }}>
+                  <button
+                    onClick={() => { setStatus(null); setForm(f => ({ ...f, name: '', email: '', phone: '', message: '' })); }}
+                    className="btn btn--secondary"
+                    style={{ marginTop: '1rem' }}
+                  >
                     Submit Another Enquiry
                   </button>
                 </div>
@@ -112,6 +174,7 @@ export default function Contact() {
                         <option>Gold</option>
                         <option>Platinum</option>
                         <option>Royal</option>
+                        <option>Diamond</option>
                         <option>Custom / Not sure</option>
                       </select>
                     </div>
@@ -152,41 +215,52 @@ export default function Contact() {
 
             {/* Info sidebar */}
             <aside className="contact-info">
-              <div className="contact-info__card">
-                <h3 className="contact-info__title">Visit Us</h3>
-                <address className="contact-info__address">
-                  Raj Mahal Palace & Events<br />
-                  Palace Road, Near City Palace<br />
-                  Jaipur, Rajasthan — 302 001
-                </address>
-              </div>
-
-              <div className="contact-info__card">
-                <h3 className="contact-info__title">Get in Touch</h3>
-                <div className="contact-info__links">
-                  <a href="tel:+911412345678">📞 +91 141 234 5678</a>
-                  <a href="tel:+919876543210">📞 +91 98765 43210 (Events)</a>
-                  <a href="mailto:events@rajmahal.in">✉️ events@rajmahal.in</a>
+              {contactInfo.map((item, i) => (
+                <div key={i} className="contact-info__card">
+                  <div className="contact-info__icon-wrap">
+                    <span className="contact-info__icon">{item.icon}</span>
+                  </div>
+                  <div>
+                    <h3 className="contact-info__title">{item.label}</h3>
+                    {item.href ? (
+                      <a href={item.href} className="contact-info__link" target={item.whatsapp ? '_blank' : undefined} rel={item.whatsapp ? 'noreferrer' : undefined}>
+                        {item.lines[0]}
+                        {item.lines.length > 1 && <><br /><span style={{ opacity: 0.7 }}>{item.lines[1]}</span></>}
+                      </a>
+                    ) : (
+                      <address className="contact-info__address">
+                        {item.lines.map((l, j) => <span key={j}>{l}<br /></span>)}
+                      </address>
+                    )}
+                  </div>
                 </div>
+              ))}
+
+              <div className="contact-info__perks">
+                <h3 className="contact-info__title" style={{ marginBottom: 'var(--sp-4)' }}>Why Book Directly?</h3>
+                {['Best rate guarantee', 'Free venue tour', 'Priority date hold', 'Dedicated event manager', 'Bespoke package quotes'].map((p) => (
+                  <div key={p} className="contact-info__perk">
+                    <span className="contact-info__perk-icon">✦</span>
+                    <span>{p}</span>
+                  </div>
+                ))}
               </div>
 
-              <div className="contact-info__card">
-                <h3 className="contact-info__title">Office Hours</h3>
-                <div className="contact-info__hours">
-                  <div><span>Mon – Sat</span><span>9:00 AM – 7:00 PM</span></div>
-                  <div><span>Sunday</span><span>10:00 AM – 4:00 PM</span></div>
-                  <div><span>Public Holidays</span><span>By appointment</span></div>
+              {/* Map placeholder */}
+              <div className="contact-map">
+                <div className="contact-map__placeholder">
+                  <span>📍</span>
+                  <p>Palace Road, Near City Palace, Jaipur</p>
+                  <a
+                    href="https://maps.google.com/?q=City+Palace+Jaipur"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn--secondary"
+                    style={{ marginTop: 'var(--sp-3)', fontSize: 'var(--fs-xs)' }}
+                  >
+                    Open in Google Maps
+                  </a>
                 </div>
-              </div>
-
-              <div className="contact-info__card">
-                <h3 className="contact-info__title">Why Book Directly?</h3>
-                <ul className="contact-info__perks">
-                  <li><span>✦</span> Best rate guarantee</li>
-                  <li><span>✦</span> Free venue tour</li>
-                  <li><span>✦</span> Priority date hold</li>
-                  <li><span>✦</span> Dedicated event manager</li>
-                </ul>
               </div>
             </aside>
           </div>

@@ -7,13 +7,107 @@ import './Packages.css';
 const API = 'http://localhost:5000';
 
 const fallbackPackages = [
-  { id:'1', name:'Gold', subtitle:'The Classic Celebration', price:250000, priceUnit:'per event', features:['Venue rental (up to 8 hours)','Basic floral décor','Standard AV setup','Parking for 50 cars','1 Dedicated coordinator','Standard catering menu','Basic lighting setup'], notIncluded:['Custom décor','Photography','Luxury suite access'], popular:false },
-  { id:'2', name:'Platinum', subtitle:'The Grand Affair', price:500000, priceUnit:'per event', features:['Venue rental (up to 12 hours)','Custom floral décor & mandap','Premium AV + LED backdrop','Parking for 120 cars','2 Dedicated coordinators','Multi-cuisine live counters','Ambient + stage lighting','Bridal suite access','Welcome drink setup'], notIncluded:['Photography package'], popular:true },
-  { id:'3', name:'Royal', subtitle:'The Raj Mahal Experience', price:950000, priceUnit:'per event', features:['Full palace access (24 hours)','Master floral design by creative director','Full AV production with operator','Unlimited valet parking','Dedicated event management team','Royal thali + international buffet','Cinematic lighting design','Presidential suite for 2 nights','Professional photography (8 hrs)','Fireworks clearance & setup','Custom monogram & stationery'], notIncluded:[], popular:false },
+  {
+    id: '1',
+    name: 'Gold',
+    subtitle: 'The Classic Celebration',
+    price: 250000,
+    priceUnit: 'per event',
+    capacity: 'Up to 300 guests',
+    duration: 'Up to 8 hours',
+    color: 'gold',
+    features: [
+      'Venue rental (up to 8 hours)',
+      'Basic floral décor',
+      'Standard AV setup',
+      'Parking for 50 cars',
+      '1 Dedicated coordinator',
+      'Standard catering menu',
+      'Basic lighting setup',
+    ],
+    notIncluded: ['Custom décor', 'Photography', 'Luxury suite access'],
+    popular: false,
+  },
+  {
+    id: '2',
+    name: 'Platinum',
+    subtitle: 'The Grand Affair',
+    price: 500000,
+    priceUnit: 'per event',
+    capacity: 'Up to 600 guests',
+    duration: 'Up to 12 hours',
+    color: 'maroon',
+    features: [
+      'Venue rental (up to 12 hours)',
+      'Custom floral décor & mandap',
+      'Premium AV + LED backdrop',
+      'Parking for 120 cars',
+      '2 Dedicated coordinators',
+      'Multi-cuisine live counters',
+      'Ambient + stage lighting',
+      'Bridal suite access',
+      'Welcome drink setup',
+    ],
+    notIncluded: ['Photography package'],
+    popular: true,
+  },
+  {
+    id: '3',
+    name: 'Royal',
+    subtitle: 'The Raj Mahal Experience',
+    price: 950000,
+    priceUnit: 'per event',
+    capacity: 'Up to 1,000 guests',
+    duration: '24 hours',
+    color: 'dark',
+    features: [
+      'Full palace access (24 hours)',
+      'Master floral design by creative director',
+      'Full AV production with operator',
+      'Unlimited valet parking',
+      'Dedicated event management team',
+      'Royal thali + international buffet',
+      'Cinematic lighting design',
+      'Presidential suite for 2 nights',
+      'Professional photography (8 hrs)',
+      'Fireworks clearance & setup',
+      'Custom monogram & stationery',
+    ],
+    notIncluded: [],
+    popular: false,
+  },
+  {
+    id: '4',
+    name: 'Diamond',
+    subtitle: 'The Maharaja Collection',
+    price: 2000000,
+    priceUnit: 'per event',
+    capacity: 'Unlimited guests',
+    duration: '3 Days',
+    color: 'diamond',
+    features: [
+      'Exclusive 3-day palace booking',
+      'Bespoke floral design — all spaces',
+      'Broadcast-grade AV production',
+      'Private helicopter arrival experience',
+      'Full event management concierge',
+      'Michelin-inspired dining experience',
+      'Theatrical & drone light show',
+      'Entire palace accommodation (15 suites)',
+      'Full photography + videography team',
+      'Celebrity entertainment arrangement',
+      'Custom brand identity & stationery',
+      'Post-event highlight film',
+      'Social media content production',
+    ],
+    notIncluded: [],
+    popular: false,
+  },
 ];
 
 function fmt(n) {
-  if (n >= 100000) return `₹${(n/100000).toFixed(n%100000===0?0:1)} Lakh`;
+  if (n >= 10000000) return `₹${(n / 10000000).toFixed(n % 10000000 === 0 ? 0 : 1)} Cr`;
+  if (n >= 100000) return `₹${(n / 100000).toFixed(n % 100000 === 0 ? 0 : 1)} Lakh`;
   return `₹${n.toLocaleString('en-IN')}`;
 }
 
@@ -26,6 +120,8 @@ export default function Packages() {
 
   return (
     <div>
+      <title>Event Packages — Raj Mahal</title>
+
       {/* Hero */}
       <div className="page-hero">
         <div className="page-hero__bg">
@@ -33,7 +129,7 @@ export default function Packages() {
           <div className="page-hero__overlay" />
         </div>
         <div className="page-hero__content container">
-          <p className="page-hero__eyebrow">Pricing</p>
+          <p className="page-hero__eyebrow">Transparent Pricing</p>
           <h1 className="page-hero__title">Our Event <em>Packages</em></h1>
           <nav aria-label="Breadcrumb" className="breadcrumb">
             <Link to="/">Home</Link> <span>/</span> <span>Packages</span>
@@ -44,7 +140,7 @@ export default function Packages() {
       {/* Header */}
       <section className="section section--sm">
         <div className="container" style={{ textAlign: 'center' }}>
-          <p className="section-tag">Transparent Pricing</p>
+          <p className="section-tag">Choose Your Package</p>
           <h2 className="section-title">Choose Your <em>Royal Experience</em></h2>
           <div className="divider" />
           <p className="section-subtitle">
@@ -58,8 +154,14 @@ export default function Packages() {
         <div className="container">
           <div className="packages-grid">
             {packages.map((pkg) => (
-              <div key={pkg.id} id={`pkg-${pkg.name.toLowerCase()}`} className={`pkg-card ${pkg.popular ? 'pkg-card--popular' : ''}`}>
+              <div
+                key={pkg.id}
+                id={`pkg-${pkg.name.toLowerCase()}`}
+                className={`pkg-card pkg-card--${pkg.color} ${pkg.popular ? 'pkg-card--popular' : ''}`}
+              >
                 {pkg.popular && <div className="pkg-card__ribbon">Most Popular</div>}
+                {pkg.name === 'Diamond' && <div className="pkg-card__ribbon pkg-card__ribbon--diamond">✦ Ultimate Luxury</div>}
+
                 <div className="pkg-card__header">
                   <p className="pkg-card__name">{pkg.name}</p>
                   <p className="pkg-card__subtitle">{pkg.subtitle}</p>
@@ -67,8 +169,14 @@ export default function Packages() {
                     <span className="pkg-card__price-amt">{fmt(pkg.price)}</span>
                     <span className="pkg-card__price-unit">{pkg.priceUnit}</span>
                   </div>
+                  <div className="pkg-card__specs">
+                    <span>👥 {pkg.capacity}</span>
+                    <span>⏱ {pkg.duration}</span>
+                  </div>
                 </div>
+
                 <div className="pkg-card__divider" />
+
                 <ul className="pkg-card__features">
                   {pkg.features.map((f) => (
                     <li key={f} className="pkg-card__feature pkg-card__feature--included">
@@ -81,13 +189,14 @@ export default function Packages() {
                     </li>
                   ))}
                 </ul>
+
                 <div className="pkg-card__footer">
                   <Link
                     to={`/contact?package=${encodeURIComponent(pkg.name)}`}
-                    className={`btn btn--lg ${pkg.popular ? 'btn--primary' : 'btn--secondary'}`}
-                    style={{ width: '100%', justifyContent: 'center' }}
+                    id={`pkg-cta-${pkg.name.toLowerCase()}`}
+                    className={`btn btn--lg pkg-card__cta`}
                   >
-                    Book {pkg.name} Package
+                    Check Availability →
                   </Link>
                 </div>
               </div>
@@ -117,24 +226,27 @@ export default function Packages() {
                   <th>Gold</th>
                   <th className="compare-table__popular">Platinum</th>
                   <th>Royal</th>
+                  <th className="compare-table__diamond">Diamond</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['Venue Hours', 'Up to 8 hrs', 'Up to 12 hrs', '24 hrs'],
-                  ['Floral Décor', 'Basic', 'Custom + mandap', 'Master design'],
-                  ['AV Setup', 'Standard', 'Premium + LED', 'Full production'],
-                  ['Coordinator', '1 person', '2 persons', 'Full team'],
-                  ['Catering', 'Standard menu', 'Live counters', 'Royal + international'],
-                  ['Suite Access', '—', 'Bridal suite', 'Presidential (2 nights)'],
-                  ['Photography', '—', '—', '8 hours professional'],
-                  ['Valet Parking', '50 cars', '120 cars', 'Unlimited'],
-                  ['Fireworks', '—', '—', '✓ Included'],
+                  ['Venue Hours', 'Up to 8 hrs', 'Up to 12 hrs', '24 hrs', '3 Days'],
+                  ['Guest Capacity', '300', '600', '1,000', 'Unlimited'],
+                  ['Floral Décor', 'Basic', 'Custom + mandap', 'Master design', 'All spaces — bespoke'],
+                  ['AV Setup', 'Standard', 'Premium + LED', 'Full production', 'Broadcast-grade'],
+                  ['Coordinator', '1 person', '2 persons', 'Full team', 'Concierge team'],
+                  ['Catering', 'Standard menu', 'Live counters', 'Royal + international', 'Michelin-inspired'],
+                  ['Suite Access', '—', 'Bridal suite', 'Presidential (2 nights)', '15 suites included'],
+                  ['Photography', '—', '—', '8 hrs professional', 'Full team + film'],
+                  ['Valet Parking', '50 cars', '120 cars', 'Unlimited', 'Helicopter + fleet'],
+                  ['Fireworks', '—', '—', '✓ Included', 'Drone light show'],
+                  ['Entertainment', '—', '—', '—', 'Celebrity arrangement'],
                 ].map(([feat, ...vals]) => (
                   <tr key={feat}>
                     <td>{feat}</td>
                     {vals.map((v, i) => (
-                      <td key={i} className={i === 1 ? 'compare-table__popular' : ''}>
+                      <td key={i} className={i === 1 ? 'compare-table__popular' : i === 3 ? 'compare-table__diamond' : ''}>
                         {v === '—' ? <span style={{ color: 'var(--clr-muted)', opacity: 0.4 }}>—</span> : v}
                       </td>
                     ))}

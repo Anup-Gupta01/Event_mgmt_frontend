@@ -1,14 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
 import './Navbar.css';
 
 const navLinks = [
   { label: 'Home',     to: '/' },
   { label: 'About',    to: '/about' },
+  { label: 'Services', to: '/services' },
   { label: 'Venues',   to: '/venues' },
-  { label: 'Events',   to: '/events' },
-  { label: 'Gallery',  to: '/gallery' },
   { label: 'Packages', to: '/packages' },
+  { label: 'Gallery',  to: '/gallery' },
+  { label: 'Contact',  to: '/contact' },
 ];
 
 export default function Navbar() {
@@ -58,6 +59,9 @@ export default function Navbar() {
 
         {/* CTA */}
         <div className="navbar__actions">
+          <Link to="/login" id="nav-login-btn" className="btn navbar__login-btn">
+            Login
+          </Link>
           <Link to="/contact" id="nav-book-cta" className="btn btn--primary navbar__cta">
             Book an Event
           </Link>
@@ -88,9 +92,14 @@ export default function Navbar() {
             {label}
           </NavLink>
         ))}
-        <Link to="/contact" className="btn btn--primary" style={{ marginTop: '1rem', width: '100%', justifyContent: 'center' }}>
-          Book an Event
-        </Link>
+        <div className="navbar__mobile-btns">
+          <Link to="/login" className="btn btn--secondary" style={{ flex: 1, justifyContent: 'center' }}>
+            Login
+          </Link>
+          <Link to="/contact" className="btn btn--primary" style={{ flex: 1, justifyContent: 'center' }}>
+            Book an Event
+          </Link>
+        </div>
       </div>
     </header>
   );

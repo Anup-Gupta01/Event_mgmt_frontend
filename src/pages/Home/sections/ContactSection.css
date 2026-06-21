@@ -1,0 +1,91 @@
+/* ── Contact Strip ────────────────────────────────────────────────────────── */
+.contact-strip {
+  background: var(--clr-surface-alt);
+  border-top: 1px solid var(--clr-border);
+}
+
+.contact-strip__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-16);
+  align-items: center;
+}
+
+.contact-strip__actions {
+  display: flex;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  margin-top: var(--sp-8);
+}
+
+.contact-strip__right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  background: var(--clr-surface);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--r-xl);
+  padding: var(--sp-8);
+}
+
+.contact-strip__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-4);
+}
+
+.contact-strip__icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--clr-surface-alt);
+  border: 1px solid var(--clr-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-strip__label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--clr-gold);
+  margin-bottom: 2px;
+}
+
+.contact-strip__value {
+  font-size: var(--fs-sm);
+  color: var(--clr-body);
+  line-height: 1.5;
+}
+
+.contact-strip__value--link {
+  color: var(--clr-maroon);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color var(--tr-fast);
+}
+
+.contact-strip__value--link:hover {
+  color: var(--clr-maroon-lt);
+}
+
+@media (max-width: 900px) {
+  .contact-strip__inner {
+    grid-template-columns: 1fr;
+    gap: var(--sp-10);
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-strip__actions {
+    flex-direction: column;
+  }
+  .contact-strip__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

@@ -1,0 +1,115 @@
+/* ── Venue Highlights ─────────────────────────────────────────────────────── */
+.venue-hl {
+  background: var(--clr-bg);
+}
+
+.venue-hl__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sp-5);
+  margin-bottom: var(--sp-6);
+}
+
+.venue-hl__card {
+  display: block;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  border: 1px solid var(--clr-border-lt);
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--tr-base), box-shadow var(--tr-base);
+  background: var(--clr-surface);
+}
+
+.venue-hl__card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-xl);
+}
+
+.venue-hl__img-wrap {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+}
+
+.venue-hl__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.venue-hl__card:hover .venue-hl__img {
+  transform: scale(1.06);
+}
+
+.venue-hl__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(26,10,8,0.75) 0%, transparent 55%);
+}
+
+.venue-hl__tag {
+  position: absolute;
+  top: var(--sp-4);
+  left: var(--sp-4);
+  background: var(--clr-gold);
+  color: #fff;
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border-radius: 2px;
+}
+
+.venue-hl__body {
+  padding: var(--sp-5);
+}
+
+.venue-hl__category {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--clr-gold);
+  margin-bottom: var(--sp-1);
+}
+
+.venue-hl__name {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-xl);
+  font-weight: 500;
+  color: var(--clr-text);
+  margin-bottom: var(--sp-3);
+  line-height: 1.2;
+}
+
+.venue-hl__meta {
+  display: flex;
+  gap: var(--sp-4);
+  font-size: var(--fs-xs);
+  color: var(--clr-muted);
+  margin-bottom: var(--sp-4);
+}
+
+.venue-hl__link {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--clr-maroon);
+  letter-spacing: 0.04em;
+  transition: gap var(--tr-fast);
+}
+
+.venue-hl__card:hover .venue-hl__link {
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 1024px) {
+  .venue-hl__grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .venue-hl__grid { grid-template-columns: 1fr; }
+  .venue-hl__img-wrap { aspect-ratio: 16/9; }
+}
