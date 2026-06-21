@@ -62,7 +62,7 @@ export default function Navbar() {
           <Link to="/login" id="nav-login-btn" className="btn navbar__login-btn">
             Login
           </Link>
-          <Link to="/contact" id="nav-book-cta" className="btn btn--primary navbar__cta">
+          <Link to="/booking" id="nav-book-cta" className="btn btn--primary navbar__cta">
             Book an Event
           </Link>
           <button
@@ -96,7 +96,7 @@ export default function Navbar() {
           <Link to="/login" className="btn btn--secondary" style={{ flex: 1, justifyContent: 'center' }}>
             Login
           </Link>
-          <Link to="/contact" className="btn btn--primary" style={{ flex: 1, justifyContent: 'center' }}>
+          <Link to="/booking" className="btn btn--primary" style={{ flex: 1, justifyContent: 'center' }}>
             Book an Event
           </Link>
         </div>
