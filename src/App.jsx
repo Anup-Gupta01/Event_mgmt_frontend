@@ -12,6 +12,7 @@ import Gallery from './pages/Gallery/Gallery';
 import Packages from './pages/Packages/Packages';
 import Contact from './pages/Contact/Contact';
 import Login from './pages/Login/Login';
+import MyBookings from './pages/Login/MyBookings';
 import Admin from './pages/Admin/Admin';
 import Booking from './pages/Booking/Booking';
 
@@ -23,13 +24,14 @@ function ScrollToTop() {
 
 function AppContent() {
   const location = useLocation();
-  const isAdmin = location.pathname.startsWith('/admin');
-  const isLogin = location.pathname === '/login';
+  const isAdmin      = location.pathname.startsWith('/admin');
+  const isLogin      = location.pathname === '/login';
+  const isMyBookings = location.pathname === '/my-bookings';
 
   return (
     <>
       <ScrollToTop />
-      {!isAdmin && <Navbar />}
+      {!isAdmin && !isMyBookings && <Navbar />}
       <main>
         <Routes>
           <Route path="/"              element={<Home />} />
@@ -42,11 +44,12 @@ function AppContent() {
           <Route path="/packages"      element={<Packages />} />
           <Route path="/contact"       element={<Contact />} />
           <Route path="/login"         element={<Login />} />
+          <Route path="/my-bookings"   element={<MyBookings />} />
           <Route path="/booking"       element={<Booking />} />
           <Route path="/admin/*"       element={<Admin />} />
         </Routes>
       </main>
-      {!isAdmin && !isLogin && <Footer />}
+      {!isAdmin && !isLogin && !isMyBookings && <Footer />}
     </>
   );
 }
