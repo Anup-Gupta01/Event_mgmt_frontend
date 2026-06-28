@@ -15,6 +15,11 @@ export default function AdminLogin() {
     // Demo authentication: admin / admin123
     setTimeout(() => {
       if (form.username === 'admin' && form.password === 'admin123') {
+        if (form.remember) {
+          localStorage.setItem('isAdminAuthenticated', 'true');
+        } else {
+          sessionStorage.setItem('isAdminAuthenticated', 'true');
+        }
         navigate('/admin/dashboard');
       } else {
         setStatus('error');

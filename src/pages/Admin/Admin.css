@@ -491,6 +491,10 @@
   flex-shrink: 0;
 }
 
+.adm-topbar__menu-toggle {
+  display: none;
+}
+
 .adm-topbar__left {
   display: flex;
   align-items: center;
@@ -1499,7 +1503,42 @@
 }
 
 @media (max-width: 768px) {
-  .adm-sidebar { display: none; }
+  .adm-sidebar {
+    display: flex;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: -240px;
+    width: var(--adm-sidebar-w);
+    transition: left var(--tr-base);
+    box-shadow: var(--shadow-xl);
+  }
+  .adm-sidebar--open {
+    left: 0;
+  }
+  .adm-sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 95;
+    animation: fadeIn var(--tr-fast) both;
+  }
+  .adm-topbar__menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: var(--clr-text);
+    cursor: pointer;
+    padding: var(--sp-1);
+    margin-right: var(--sp-1);
+  }
+  .adm-topbar__bread-arrow,
+  .adm-topbar__breadcrumb {
+    display: none;
+  }
   .adm-stats-grid { grid-template-columns: 1fr 1fr; }
   .adm-pkg-grid { grid-template-columns: 1fr; }
 

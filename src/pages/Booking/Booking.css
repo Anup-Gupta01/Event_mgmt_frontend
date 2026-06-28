@@ -804,7 +804,7 @@
   }
 
   .event-type-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: var(--sp-2);
   }
 
@@ -817,7 +817,7 @@
   }
 
   .venue-cards-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .booking-form__grid {
@@ -835,7 +835,7 @@
 
 @media (max-width: 480px) {
   .event-type-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 
   .addon-grid {
@@ -843,7 +843,7 @@
   }
 
   .venue-cards-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 
   .booking-stepper__inner {

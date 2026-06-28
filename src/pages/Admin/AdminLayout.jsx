@@ -1,4 +1,5 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { NavLink, Outlet, useNavigate, Navigate } from 'react-router-dom';
 import './Admin.css';
 
 const NAV_ITEMS = [
@@ -11,15 +12,31 @@ const NAV_ITEMS = [
 
 export default function AdminLayout() {
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
+    localStorage.removeItem('isAdminAuthenticated');
+    sessionStorage.removeItem('isAdminAuthenticated');
     navigate('/admin/login');
   };
 
+  const isAuthenticated =
+    localStorage.getItem('isAdminAuthenticated') === 'true' ||
+    sessionStorage.getItem('isAdminAuthenticated') === 'true';
+
+  if (!isAuthenticated) {
+    return <Navigate to="/admin/login" replace />;
+  }
+
   return (
     <div className="adm-layout">
+      {/* Sidebar overlay for mobile viewport */}
+      {sidebarOpen && (
+        <div className="adm-sidebar-overlay" onClick={() => setSidebarOpen(false)} />
+      )}
+
       {/* ── Sidebar ─────────────────────────────────────────────────── */}
-      <aside className="adm-sidebar">
+      <aside className={`adm-sidebar ${sidebarOpen ? 'adm-sidebar--open' : ''}`}>
         <div className="adm-sidebar__brand">
           <div className="adm-sidebar__brand-icon">✦</div>
           <div>
@@ -34,6 +51,7 @@ export default function AdminLayout() {
             <NavLink
               key={item.to}
               to={item.to}
+              onClick={() => setSidebarOpen(false)}
               className={({ isActive }) =>
                 `adm-sidebar__item${isActive ? ' adm-sidebar__item--active' : ''}`
               }
@@ -52,6 +70,7 @@ export default function AdminLayout() {
             target="_blank"
             rel="noreferrer"
             className="adm-sidebar__item"
+            onClick={() => setSidebarOpen(false)}
           >
             <span className="adm-sidebar__item-icon">🌐</span>
             Public Website
@@ -71,8 +90,15 @@ export default function AdminLayout() {
         {/* Topbar */}
         <header className="adm-topbar">
           <div className="adm-topbar__left">
+            <button
+              className="adm-topbar__menu-toggle"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              aria-label="Toggle Sidebar"
+            >
+              ☰
+            </button>
             <div className="adm-topbar__title">Raj Mahal</div>
-            <span style={{ color: 'var(--clr-border)', fontSize: '1.2rem' }}>›</span>
+            <span style={{ color: 'var(--clr-border)', fontSize: '1.2rem' }} className="adm-topbar__bread-arrow">›</span>
             <div className="adm-topbar__breadcrumb">Admin Dashboard</div>
           </div>
 
