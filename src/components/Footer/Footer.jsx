@@ -36,6 +36,8 @@ export default function Footer() {
                 <li><Link to="/events">Event Services</Link></li>
                 <li><Link to="/gallery">Photo Gallery</Link></li>
                 <li><Link to="/packages">Packages</Link></li>
+                <li><Link to="/booking">Book an Event</Link></li>
+                <li><Link to="/track">Track Booking</Link></li>
               </ul>
             </div>
 

@@ -1,18 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Admin.css';
 
-const RECENT_BOOKINGS = [
-  { id: 'RM-2401', client: 'Priya Sharma', event: 'Wedding Reception', date: '14 Feb 2024', guests: 350, venue: 'Grand Durbar Hall', amount: 4850000, status: 'Pending' },
-  { id: 'RM-2402', client: 'Arjun Mehta',  event: 'Corporate Gala',    date: '20 Feb 2024', guests: 120, venue: 'Maharani Pavilion', amount: 1250000, status: 'Approved' },
-  { id: 'RM-2403', client: 'Sunita Kapoor', event: 'Sangeet Ceremony', date: '05 Mar 2024', guests: 200, venue: 'Jasmine Terrace',   amount: 980000,  status: 'Pending' },
-  { id: 'RM-2404', client: 'Vikram Rathore',event: 'Product Launch',   date: '12 Mar 2024', guests: 80,  venue: 'Lotus Boardroom',   amount: 620000,  status: 'Approved' },
-  { id: 'RM-2405', client: 'Deepa Nair',    event: 'Anniversary',      date: '18 Mar 2024', guests: 60,  venue: 'Royal Garden',      amount: 450000,  status: 'Completed' },
-];
+const API = 'http://localhost:5000';
 
 const STATUS_MAP = {
   Pending:   'adm-badge--pending',
   Approved:  'adm-badge--approved',
+  Confirmed: 'adm-badge--approved',
   Completed: 'adm-badge--done',
   Rejected:  'adm-badge--rejected',
 };
@@ -22,23 +18,44 @@ function StatusBadge({ status }) {
 }
 
 function formatINR(n) {
-  return '₹' + n.toLocaleString('en-IN');
+  return '₹' + Number(n || 0).toLocaleString('en-IN');
 }
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const [bookings, setBookings] = useState(RECENT_BOOKINGS);
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading]   = useState(true);
+
+  const fetchBookings = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API}/api/bookings`);
+      setBookings(res.data);
+    } catch {
+      console.warn('Failed to fetch bookings from backend.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchBookings(); }, [fetchBookings]);
+
+  const updateStatus = async (id, status) => {
+    try {
+      await axios.patch(`${API}/api/bookings/${id}`, { status });
+      setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b));
+    } catch {
+      alert('Failed to update status.');
+    }
+  };
 
   const stats = {
     pending:   bookings.filter(b => b.status === 'Pending').length,
-    approved:  bookings.filter(b => b.status === 'Approved').length,
+    approved:  bookings.filter(b => ['Approved', 'Confirmed'].includes(b.status)).length,
     completed: bookings.filter(b => b.status === 'Completed').length,
-    revenue:   bookings.filter(b => b.status !== 'Rejected').reduce((s, b) => s + b.amount, 0),
+    total:     bookings.length,
   };
 
-  const updateStatus = (id, status) => {
-    setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b));
-  };
+  const recent = [...bookings].slice(0, 5);
 
   return (
     <div>
@@ -64,53 +81,43 @@ export default function AdminDashboard() {
         {/* Pending */}
         <div className="adm-stat-card">
           <div className="adm-stat-card__top">
-            <div className="adm-stat-card__icon" style={{ background: 'rgba(133,100,4,0.1)' }}>
-              ⏳
-            </div>
-            <span className="adm-stat-card__trend adm-stat-card__trend--down">
-              +2 today
-            </span>
+            <div className="adm-stat-card__icon" style={{ background: 'rgba(133,100,4,0.1)' }}>⏳</div>
+            <span className="adm-stat-card__trend adm-stat-card__trend--down">Awaiting review</span>
           </div>
-          <div className="adm-stat-card__val">{stats.pending}</div>
+          <div className="adm-stat-card__val">{loading ? '…' : stats.pending}</div>
           <div className="adm-stat-card__lbl">Pending Requests</div>
         </div>
 
         {/* Approved */}
         <div className="adm-stat-card">
           <div className="adm-stat-card__top">
-            <div className="adm-stat-card__icon" style={{ background: 'rgba(22,101,52,0.1)' }}>
-              ✅
-            </div>
-            <span className="adm-stat-card__trend">+1 today</span>
+            <div className="adm-stat-card__icon" style={{ background: 'rgba(22,101,52,0.1)' }}>✅</div>
+            <span className="adm-stat-card__trend">Active</span>
           </div>
-          <div className="adm-stat-card__val">{stats.approved}</div>
+          <div className="adm-stat-card__val">{loading ? '…' : stats.approved}</div>
           <div className="adm-stat-card__lbl">Approved Bookings</div>
         </div>
 
         {/* Completed */}
         <div className="adm-stat-card">
           <div className="adm-stat-card__top">
-            <div className="adm-stat-card__icon" style={{ background: 'rgba(91,45,142,0.1)' }}>
-              🏆
-            </div>
-            <span className="adm-stat-card__trend">+3 this month</span>
+            <div className="adm-stat-card__icon" style={{ background: 'rgba(91,45,142,0.1)' }}>🏆</div>
+            <span className="adm-stat-card__trend">All time</span>
           </div>
-          <div className="adm-stat-card__val">{stats.completed}</div>
+          <div className="adm-stat-card__val">{loading ? '…' : stats.completed}</div>
           <div className="adm-stat-card__lbl">Completed Events</div>
         </div>
 
-        {/* Revenue */}
+        {/* Total */}
         <div className="adm-stat-card" style={{ borderLeft: '3px solid var(--clr-gold)' }}>
           <div className="adm-stat-card__top">
-            <div className="adm-stat-card__icon" style={{ background: 'rgba(184,151,42,0.12)' }}>
-              💰
-            </div>
-            <span className="adm-stat-card__trend">↑ 18% MoM</span>
+            <div className="adm-stat-card__icon" style={{ background: 'rgba(184,151,42,0.12)' }}>📋</div>
+            <span className="adm-stat-card__trend">All bookings</span>
           </div>
           <div className="adm-stat-card__val" style={{ fontSize: 'var(--fs-2xl)' }}>
-            {formatINR(stats.revenue)}
+            {loading ? '…' : stats.total}
           </div>
-          <div className="adm-stat-card__lbl">Total Revenue</div>
+          <div className="adm-stat-card__lbl">Total Booking Requests</div>
         </div>
       </div>
 
@@ -120,10 +127,7 @@ export default function AdminDashboard() {
         <div>
           <div className="adm-section-title">
             Recent Booking Requests
-            <button
-              className="adm-section-link"
-              onClick={() => navigate('/admin/bookings')}
-            >
+            <button className="adm-section-link" onClick={() => navigate('/admin/bookings')}>
               See all →
             </button>
           </div>
@@ -137,22 +141,26 @@ export default function AdminDashboard() {
                     <th>Client</th>
                     <th>Event</th>
                     <th>Date</th>
-                    <th>Amount</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {bookings.map(b => (
+                  {loading ? (
+                    <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: 'var(--clr-muted)' }}>Loading…</td></tr>
+                  ) : recent.length === 0 ? (
+                    <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: 'var(--clr-muted)' }}>No bookings yet</td></tr>
+                  ) : recent.map(b => (
                     <tr key={b.id}>
                       <td><span className="adm-table__id">{b.id}</span></td>
                       <td>
-                        <div className="adm-table__primary">{b.client}</div>
+                        <div className="adm-table__primary">{b.name}</div>
                         <div className="adm-table__secondary">{b.venue}</div>
                       </td>
-                      <td>{b.event}</td>
-                      <td style={{ whiteSpace: 'nowrap' }}>{b.date}</td>
-                      <td><span className="adm-table__amount">{formatINR(b.amount)}</span></td>
+                      <td>{b.eventType}</td>
+                      <td style={{ whiteSpace: 'nowrap' }}>
+                        {b.date ? new Date(b.date + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—'}
+                      </td>
                       <td><StatusBadge status={b.status} /></td>
                       <td>
                         <div className="adm-actions-row">
@@ -160,6 +168,7 @@ export default function AdminDashboard() {
                             className="adm-action-btn"
                             title="View"
                             style={{ fontSize: '0.75rem' }}
+                            onClick={() => navigate('/admin/bookings')}
                           >👁</button>
                           {b.status === 'Pending' && (
                             <>
@@ -193,22 +202,22 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Right: Revenue card + quick actions */}
+        {/* Right: Quick stats + actions */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-4)' }}>
-          {/* Revenue highlight */}
+          {/* Booking status highlight */}
           <div className="adm-revenue-card">
-            <div className="adm-revenue-card__label">Monthly Revenue — June 2024</div>
-            <div className="adm-revenue-card__amount">₹82,40,000</div>
+            <div className="adm-revenue-card__label">Booking Overview</div>
+            <div className="adm-revenue-card__amount">{loading ? '…' : stats.total}</div>
             <div className="adm-revenue-card__sub">
-              14 bookings confirmed · 3 pending review
+              {stats.approved} approved · {stats.pending} pending review
             </div>
             <div style={{ marginTop: '1.25rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.12)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'rgba(255,255,255,0.55)', marginBottom: '0.4rem' }}>
-                <span>Monthly Target ₹1,00,00,000</span>
-                <span>82%</span>
+                <span>Completion Rate</span>
+                <span>{stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0}%</span>
               </div>
               <div style={{ height: '6px', background: 'rgba(255,255,255,0.12)', borderRadius: '100px', overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: '82%', background: 'var(--clr-gold-lt)', borderRadius: '100px' }} />
+                <div style={{ height: '100%', width: `${stats.total > 0 ? Math.round((stats.completed / stats.total) * 100) : 0}%`, background: 'var(--clr-gold-lt)', borderRadius: '100px' }} />
               </div>
             </div>
           </div>
@@ -235,28 +244,30 @@ export default function AdminDashboard() {
             </a>
           </div>
 
-          {/* Upcoming events */}
-          <div className="adm-quick-actions">
-            <div className="adm-section-title" style={{ fontSize: 'var(--fs-base)', marginBottom: 'var(--sp-4)' }}>
-              Upcoming Events
-            </div>
-            {[
-              { day: '14', mon: 'Feb', name: 'Sharma Wedding', meta: 'Grand Durbar Hall · 350 pax' },
-              { day: '20', mon: 'Feb', name: 'Mehta Corp Gala', meta: 'Maharani Pavilion · 120 pax' },
-              { day: '05', mon: 'Mar', name: 'Kapoor Sangeet', meta: 'Jasmine Terrace · 200 pax' },
-            ].map(ev => (
-              <div key={ev.name} className="adm-upcoming-item">
-                <div className="adm-upcoming-date">
-                  <span className="adm-upcoming-date__day">{ev.day}</span>
-                  <span className="adm-upcoming-date__mon">{ev.mon}</span>
-                </div>
-                <div className="adm-upcoming-info">
-                  <div className="adm-upcoming-name">{ev.name}</div>
-                  <div className="adm-upcoming-meta">{ev.meta}</div>
-                </div>
+          {/* Recent pending */}
+          {stats.pending > 0 && (
+            <div className="adm-quick-actions">
+              <div className="adm-section-title" style={{ fontSize: 'var(--fs-base)', marginBottom: 'var(--sp-4)' }}>
+                Needs Attention
               </div>
-            ))}
-          </div>
+              {bookings.filter(b => b.status === 'Pending').slice(0, 3).map(b => (
+                <div key={b.id} className="adm-upcoming-item">
+                  <div className="adm-upcoming-date">
+                    <span className="adm-upcoming-date__day">
+                      {b.date ? new Date(b.date + 'T00:00:00').getDate() : '—'}
+                    </span>
+                    <span className="adm-upcoming-date__mon">
+                      {b.date ? new Date(b.date + 'T00:00:00').toLocaleString('en-IN', { month: 'short' }) : ''}
+                    </span>
+                  </div>
+                  <div className="adm-upcoming-info">
+                    <div className="adm-upcoming-name">{b.name}</div>
+                    <div className="adm-upcoming-meta">{b.eventType} · {b.venue || 'Venue TBD'}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

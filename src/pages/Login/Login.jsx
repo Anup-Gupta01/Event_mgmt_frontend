@@ -32,7 +32,8 @@ export default function Login() {
     setStatus('loading');
     setTimeout(() => {
       setStatus('success');
-      setMessage('Account created! Our team will verify and activate your account within 24 hours.');
+      setMessage('Account created successfully! You can now sign in.');
+      setTimeout(() => switchTab('login'), 1500);
     }, 1400);
   };
 

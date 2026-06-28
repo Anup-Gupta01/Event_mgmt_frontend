@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import './MyBookings.css';
+
+const API = 'http://localhost:5000';
 
 /* ── Mock Data ─────────────────────────────────────────────────────────────── */
 const USER = {
@@ -8,53 +11,6 @@ const USER = {
   email: 'priya.mehta@example.com',
   initials: 'PM',
 };
-
-const BOOKINGS = [
-  {
-    id: 'RMH-2026-0041',
-    eventType: 'Royal Wedding',
-    date: '2026-12-14',
-    venue: 'Darbar Hall',
-    package: 'Royal Package',
-    price: 950000,
-    status: 'approved',
-    notes: 'Mehendi ceremony to begin at 5 PM. Fireworks clearance pending confirmation from municipality.',
-    createdAt: '2026-06-01',
-  },
-  {
-    id: 'RMH-2026-0038',
-    eventType: 'Birthday Soirée',
-    date: '2026-08-03',
-    venue: 'Rooftop Terrace',
-    package: 'Gold Package',
-    price: 250000,
-    status: 'pending',
-    notes: 'Live band setup requested. Please confirm outdoor PA system availability.',
-    createdAt: '2026-05-28',
-  },
-  {
-    id: 'RMH-2026-0029',
-    eventType: 'Anniversary Dinner',
-    date: '2026-03-22',
-    venue: 'Jasmine Pavilion',
-    package: 'Platinum Package',
-    price: 500000,
-    status: 'completed',
-    notes: 'Wonderful evening — floral décor exceeded expectations. Thank you!',
-    createdAt: '2026-01-15',
-  },
-  {
-    id: 'RMH-2026-0018',
-    eventType: 'Corporate Gala',
-    date: '2026-02-10',
-    venue: 'Maharani Suite',
-    package: 'Platinum Package',
-    price: 500000,
-    status: 'rejected',
-    notes: 'Date conflict with a pre-existing booking. Please contact us to reschedule.',
-    createdAt: '2025-12-20',
-  },
-];
 
 /* ── Helpers ────────────────────────────────────────────────────────────────── */
 function formatDate(iso) {
@@ -91,19 +47,41 @@ function StatusBadge({ status }) {
 /* ── Component ──────────────────────────────────────────────────────────────── */
 export default function MyBookings() {
   const [filterStatus, setFilterStatus] = useState('all');
-  const [expandedId, setExpandedId] = useState(null);
-  const [profileOpen, setProfileOpen] = useState(false);
+  const [expandedId, setExpandedId]     = useState(null);
+  const [profileOpen, setProfileOpen]   = useState(false);
+  const [bookings, setBookings]         = useState([]);
+  const [loading, setLoading]           = useState(true);
+
+  // In a real auth system this would come from a session/token.
+  // For demo purposes we use the seeded email.
+  const user = USER;
+
+  const fetchBookings = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${API}/api/bookings`, { params: { email: user.email } });
+      // Normalize status to lowercase for legacy STATUS_META compatibility
+      setBookings(res.data.map(b => ({ ...b, status: b.status?.toLowerCase() || 'pending' })));
+    } catch {
+      console.warn('Could not load bookings from API.');
+    } finally {
+      setLoading(false);
+    }
+  }, [user.email]);
+
+  useEffect(() => { fetchBookings(); }, [fetchBookings]);
 
   const filtered = filterStatus === 'all'
-    ? BOOKINGS
-    : BOOKINGS.filter(b => b.status === filterStatus);
+    ? bookings
+    : bookings.filter(b => b.status === filterStatus);
 
   const stats = {
-    total:     BOOKINGS.length,
-    upcoming:  BOOKINGS.filter(b => b.status === 'approved').length,
-    pending:   BOOKINGS.filter(b => b.status === 'pending').length,
-    completed: BOOKINGS.filter(b => b.status === 'completed').length,
+    total:     bookings.length,
+    upcoming:  bookings.filter(b => b.status === 'approved' || b.status === 'confirmed').length,
+    pending:   bookings.filter(b => b.status === 'pending').length,
+    completed: bookings.filter(b => b.status === 'completed').length,
   };
+
 
   const handleDownload = (booking, e) => {
     e.stopPropagation();
@@ -241,11 +219,16 @@ export default function MyBookings() {
 
         {/* ── Booking List ──────────────────────────────────────────────── */}
         <div className="mb-list">
-          {filtered.length === 0 ? (
+          {loading ? (
+            <div className="mb-empty">
+              <div className="mb-empty__icon">⏳</div>
+              <p className="mb-empty__title">Loading your bookings…</p>
+            </div>
+          ) : filtered.length === 0 ? (
             <div className="mb-empty">
               <div className="mb-empty__icon">📭</div>
               <p className="mb-empty__title">No bookings found</p>
-              <p className="mb-empty__sub">No bookings match the selected filter.</p>
+              <p className="mb-empty__sub">No bookings match the selected filter. <Link to="/track" style={{ color: 'var(--clr-maroon)' }}>Track a booking by ID →</Link></p>
             </div>
           ) : (
             filtered.map((booking, idx) => {

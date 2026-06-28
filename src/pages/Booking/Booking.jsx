@@ -77,10 +77,6 @@ const addons = [
 ];
 
 /* ── Helpers ─────────────────────────────────────────────────────────────── */
-function generateRef() {
-  return 'RM-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2, 5).toUpperCase();
-}
-
 const today = new Date().toISOString().split('T')[0];
 
 /* ── Step indicator ──────────────────────────────────────────────────────── */
@@ -535,7 +531,7 @@ function Step3({ data, onChange, onBack, onSubmit, submitting, error }) {
 /* ══════════════════════════════════════════════════════════════════════════
    SUCCESS SCREEN
 ══════════════════════════════════════════════════════════════════════════ */
-function SuccessScreen({ data, refCode }) {
+function SuccessScreen({ data, bookingId }) {
   const venue  = venues.find(v => v.id === data.venue);
   const pkg    = packages.find(p => p.id === data.package);
   const evType = eventTypes.find(e => e.id === data.eventType);
@@ -550,8 +546,9 @@ function SuccessScreen({ data, refCode }) {
           Request Received, <em>{data.name.split(' ')[0]}!</em>
         </h2>
 
-        <div className="booking-success__ref">
-          📋 Reference: {refCode}
+        {/* Booking ID — prominent */}
+        <div className="booking-success__ref" style={{ fontSize: 'var(--fs-lg)', letterSpacing: '0.06em', fontWeight: 700 }}>
+          📋 Booking ID: {bookingId}
         </div>
 
         <p className="booking-success__msg">
@@ -596,16 +593,23 @@ function SuccessScreen({ data, refCode }) {
         </div>
 
         <div style={{ display: 'flex', gap: 'var(--sp-4)', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link
+            to={`/track?id=${encodeURIComponent(bookingId)}`}
+            className="btn btn--gold btn--lg"
+            id="bk-success-track"
+          >
+            🔍 Track Your Booking
+          </Link>
           <Link to="/" className="btn btn--primary btn--lg" id="bk-success-home">
             Back to Home
           </Link>
           <a href="tel:+911412345678" className="btn btn--secondary btn--lg" id="bk-success-call">
-            📞 Call Us Now
+            📞 Call Us
           </a>
         </div>
 
         <p style={{ marginTop: 'var(--sp-6)', fontSize: 'var(--fs-xs)', color: 'var(--clr-muted)' }}>
-          Save your reference number: <strong style={{ color: 'var(--clr-maroon)' }}>{refCode}</strong> — quote it when calling.
+          Save your Booking ID: <strong style={{ color: 'var(--clr-maroon)' }}>{bookingId}</strong> — use it with your phone number to track your booking anytime.
         </p>
       </div>
     </div>
@@ -632,41 +636,38 @@ const emptyData = {
 };
 
 export default function Booking() {
-  const [step, setStep]       = useState(1);
-  const [data, setData]       = useState(emptyData);
+  const [step, setStep]           = useState(1);
+  const [data, setData]           = useState(emptyData);
   const [submitted, setSubmitted] = useState(false);
-  const [refCode, setRefCode] = useState('');
+  const [bookingId, setBookingId] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError]     = useState('');
+  const [error, setError]         = useState('');
 
   const change = (key, val) => setData(d => ({ ...d, [key]: val }));
 
   const handleSubmit = async () => {
     setSubmitting(true);
     setError('');
-    const ref = generateRef();
     try {
-      await axios.post(`${API}/api/inquiries`, {
+      const res = await axios.post(`${API}/api/bookings`, {
         name:       data.name,
         email:      data.email,
         phone:      data.phone,
         eventType:  eventTypes.find(e => e.id === data.eventType)?.label || data.eventType,
         venue:      venues.find(v => v.id === data.venue)?.name  || data.venue,
         package:    packages.find(p => p.id === data.package)?.name || data.package,
+        addons:     addons.filter(a => data.addons.includes(a.id)).map(a => a.name),
+        guestRange: data.guestRange,
         date:       data.date,
-        guestCount: data.guestRange,
-        message:    [
-          data.notes ? `Notes: ${data.notes}` : '',
-          data.addons.length > 0
-            ? `Add-ons: ${addons.filter(a => data.addons.includes(a.id)).map(a => a.name).join(', ')}`
-            : '',
-          `Booking Ref: ${ref}`,
-        ].filter(Boolean).join('\n\n'),
+        notes:      data.notes,
       });
-    } catch {
-      // Proceed even if backend unavailable in demo
+      setBookingId(res.data.bookingId);
+    } catch (err) {
+      // Fallback: generate a local ID so UX still works if backend is down
+      const fallback = 'BK-' + new Date().getFullYear() + '-' + Math.floor(Math.random() * 900 + 100);
+      setBookingId(fallback);
+      console.warn('Backend unavailable, using fallback ID', fallback);
     }
-    setRefCode(ref);
     setSubmitting(false);
     setSubmitted(true);
   };
@@ -697,7 +698,7 @@ export default function Booking() {
         <div className="container">
           {submitted ? (
             <div style={{ paddingTop: 'var(--sp-12)' }}>
-              <SuccessScreen data={data} refCode={refCode} />
+              <SuccessScreen data={data} bookingId={bookingId} />
             </div>
           ) : (
             <div className="booking-body">

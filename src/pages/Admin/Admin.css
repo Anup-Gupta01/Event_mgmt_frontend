@@ -1505,3 +1505,59 @@
 
   .al-card { padding: var(--sp-8) var(--sp-6); }
 }
+
+/* ─── Expanded booking row ───────────────────────────────────────────────── */
+
+.adm-expanded-row td {
+  padding: 0 !important;
+  background: var(--adm-surface-alt);
+  border-bottom: 2px solid var(--adm-border);
+}
+
+.adm-expanded {
+  padding: var(--sp-5) var(--sp-6);
+  animation: expandIn 0.18s ease;
+}
+
+@keyframes expandIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.adm-expanded__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-8);
+}
+
+@media (max-width: 900px) {
+  .adm-expanded__cols { grid-template-columns: 1fr; }
+}
+
+/* ─── Notes editor ───────────────────────────────────────────────────────── */
+
+.adm-notes-editor {
+  display: flex;
+  flex-direction: column;
+}
+
+.adm-notes-editor__textarea {
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--clr-border);
+  border-radius: var(--r-md);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-sm);
+  color: var(--clr-text);
+  background: var(--clr-surface);
+  resize: vertical;
+  line-height: 1.55;
+  transition: border-color var(--tr-fast), box-shadow var(--tr-fast);
+}
+
+.adm-notes-editor__textarea:focus {
+  outline: none;
+  border-color: var(--clr-gold);
+  box-shadow: 0 0 0 3px rgba(184,151,42,0.15);
+}
+

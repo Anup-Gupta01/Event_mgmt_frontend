@@ -1,48 +1,107 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import './Admin.css';
 
-const MOCK_BOOKINGS = [
-  { id: 'RM-2401', client: 'Priya Sharma', org: 'Sharma & Co.', event: 'Wedding Reception', date: '2024-02-14', guests: 350, venue: 'Grand Durbar Hall', amount: 4850000, status: 'Pending' },
-  { id: 'RM-2402', client: 'Arjun Mehta', org: 'Mehta Industries', event: 'Corporate Gala', date: '2024-02-20', guests: 120, venue: 'Maharani Pavilion', amount: 1250000, status: 'Approved' },
-  { id: 'RM-2403', client: 'Sunita Kapoor', org: '', event: 'Sangeet Ceremony', date: '2024-03-05', guests: 200, venue: 'Jasmine Terrace', amount: 980000, status: 'Pending' },
-  { id: 'RM-2404', client: 'Vikram Rathore', org: 'Rathore Enterprises', event: 'Product Launch', date: '2024-03-12', guests: 80, venue: 'Lotus Boardroom', amount: 620000, status: 'Approved' },
-  { id: 'RM-2405', client: 'Deepa Nair', org: '', event: 'Anniversary Banquet', date: '2024-03-18', guests: 60, venue: 'Royal Garden', amount: 450000, status: 'Completed' },
-  { id: 'RM-2406', client: 'Rajesh Gupta', org: 'Gupta Trading Co.', event: 'Wedding', date: '2024-04-02', guests: 500, venue: 'Grand Durbar Hall', amount: 6200000, status: 'Pending' },
-  { id: 'RM-2407', client: 'Kavya Iyer', org: '', event: 'Mehendi & Haldi', date: '2024-04-10', guests: 150, venue: 'Jasmine Terrace', amount: 780000, status: 'Rejected' },
-];
-
-function formatINR(n) {
-  return '₹' + n.toLocaleString('en-IN');
-}
+const API = 'http://localhost:5000';
 
 function formatDate(iso) {
+  if (!iso) return '—';
   return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function StatusBadge({ status }) {
-  const map = { Pending: 'pending', Approved: 'approved', Rejected: 'rejected', Completed: 'done' };
+  const map = { Pending: 'pending', Approved: 'approved', Confirmed: 'approved', Rejected: 'rejected', Completed: 'done' };
   return <span className={`adm-badge adm-badge--${map[status] || 'pending'}`}>{status}</span>;
 }
 
 const FILTERS = ['All', 'Pending', 'Approved', 'Rejected', 'Completed'];
 
+/* ── Inline Notes Editor ─────────────────────────────────────────────────── */
+function NotesEditor({ booking, onSave }) {
+  const [notes, setNotes] = useState(booking.adminNotes || '');
+  const [saving, setSaving] = useState(false);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await axios.patch(`${API}/api/bookings/${booking.id}`, { adminNotes: notes });
+      onSave(booking.id, notes);
+    } catch {
+      alert('Failed to save notes. Please try again.');
+    }
+    setSaving(false);
+  };
+
+  return (
+    <div className="adm-notes-editor">
+      <textarea
+        className="adm-notes-editor__textarea"
+        placeholder="Add admin notes (visible to customer on Track Booking page)…"
+        value={notes}
+        onChange={e => setNotes(e.target.value)}
+        rows={3}
+      />
+      <button
+        className="btn btn--primary"
+        style={{ fontSize: 'var(--fs-xs)', padding: '0.3rem 0.75rem', marginTop: '0.5rem' }}
+        onClick={handleSave}
+        disabled={saving || notes === (booking.adminNotes || '')}
+      >
+        {saving ? 'Saving…' : 'Save Notes'}
+      </button>
+    </div>
+  );
+}
+
 export default function AdminBookings() {
-  const navigate = useNavigate();
-  const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState('All');
-  const [bookings, setBookings] = useState(MOCK_BOOKINGS);
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading]   = useState(true);
+  const [search, setSearch]     = useState('');
+  const [filter, setFilter]     = useState('All');
+  const [expanded, setExpanded] = useState(null);
+
+  const fetchBookings = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API}/api/bookings`);
+      setBookings(res.data);
+    } catch {
+      console.warn('Failed to fetch bookings from backend.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchBookings(); }, [fetchBookings]);
+
+  const updateStatus = async (id, status) => {
+    try {
+      await axios.patch(`${API}/api/bookings/${id}`, { status });
+      setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b));
+    } catch {
+      alert('Failed to update status. Please try again.');
+    }
+  };
+
+  const saveNotes = (id, adminNotes) => {
+    setBookings(prev => prev.map(b => b.id === id ? { ...b, adminNotes } : b));
+  };
+
+  const deleteBooking = async (id) => {
+    if (!window.confirm('Delete this booking? This cannot be undone.')) return;
+    try {
+      await axios.delete(`${API}/api/bookings/${id}`);
+      setBookings(prev => prev.filter(b => b.id !== id));
+    } catch {
+      alert('Failed to delete booking.');
+    }
+  };
 
   const filtered = bookings.filter(b => {
     const q = search.toLowerCase();
-    const matchQ = !q || [b.client, b.org, b.event, b.venue, b.id].join(' ').toLowerCase().includes(q);
+    const matchQ = !q || [b.id, b.name, b.email, b.eventType, b.venue, b.package].join(' ').toLowerCase().includes(q);
     const matchF = filter === 'All' || b.status === filter;
     return matchQ && matchF;
   });
-
-  const updateStatus = (id, status) => {
-    setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b));
-  };
 
   const counts = FILTERS.reduce((acc, f) => {
     acc[f] = f === 'All' ? bookings.length : bookings.filter(b => b.status === f).length;
@@ -56,8 +115,8 @@ export default function AdminBookings() {
           <h1 className="adm-page-title">Booking Requests</h1>
           <p className="adm-page-sub">Review, approve, or manage all event bookings</p>
         </div>
-        <button className="btn btn--primary" style={{ fontSize: 'var(--fs-sm)' }}>
-          + New Booking
+        <button className="btn btn--secondary" style={{ fontSize: 'var(--fs-sm)' }} onClick={fetchBookings}>
+          ↻ Refresh
         </button>
       </div>
 
@@ -69,12 +128,11 @@ export default function AdminBookings() {
             id="bookings-search"
             type="search"
             className="adm-search"
-            placeholder="Search by client, event, venue…"
+            placeholder="Search by name, event, venue, booking ID…"
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
         </div>
-
         <div className="adm-filter-tabs">
           {FILTERS.map(f => (
             <button
@@ -91,93 +149,147 @@ export default function AdminBookings() {
 
       {/* Table */}
       <div className="adm-table-card">
-        <div className="adm-table-scroll">
-          <table className="adm-table">
-            <thead>
-              <tr>
-                <th>Booking ID</th>
-                <th>Client</th>
-                <th>Event Type</th>
-                <th>Date</th>
-                <th>Guests</th>
-                <th>Venue</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.length === 0 ? (
+        {loading ? (
+          <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--clr-muted)' }}>
+            Loading bookings…
+          </div>
+        ) : (
+          <div className="adm-table-scroll">
+            <table className="adm-table">
+              <thead>
                 <tr>
-                  <td colSpan={9} style={{ textAlign: 'center', padding: '3rem', color: 'var(--clr-muted)', fontFamily: 'var(--ff-serif)', fontSize: 'var(--fs-lg)' }}>
-                    No bookings found
-                  </td>
+                  <th>Booking ID</th>
+                  <th>Client</th>
+                  <th>Event Type</th>
+                  <th>Date</th>
+                  <th>Guests</th>
+                  <th>Venue</th>
+                  <th>Package</th>
+                  <th>Status</th>
+                  <th>Actions</th>
                 </tr>
-              ) : filtered.map(b => (
-                <tr key={b.id}>
-                  <td><span className="adm-table__id">{b.id}</span></td>
-                  <td>
-                    <div className="adm-table__primary">{b.client}</div>
-                    {b.org && <div className="adm-table__secondary">{b.org}</div>}
-                  </td>
-                  <td>{b.event}</td>
-                  <td>{formatDate(b.date)}</td>
-                  <td>{b.guests.toLocaleString()}</td>
-                  <td>{b.venue}</td>
-                  <td><span className="adm-table__amount">{formatINR(b.amount)}</span></td>
-                  <td><StatusBadge status={b.status} /></td>
-                  <td>
-                    <div className="adm-actions-row">
-                      <button
-                        className="adm-action-btn"
-                        title="View details"
-                        aria-label={`View ${b.id}`}
-                        style={{ fontSize: '0.75rem' }}
-                      >
-                        👁
-                      </button>
-                      {b.status === 'Pending' && (
-                        <>
+              </thead>
+              <tbody>
+                {filtered.length === 0 ? (
+                  <tr>
+                    <td colSpan={9} style={{ textAlign: 'center', padding: '3rem', color: 'var(--clr-muted)', fontFamily: 'var(--ff-serif)', fontSize: 'var(--fs-lg)' }}>
+                      No bookings found
+                    </td>
+                  </tr>
+                ) : filtered.map(b => (
+                  <>
+                    <tr key={b.id}>
+                      <td><span className="adm-table__id">{b.id}</span></td>
+                      <td>
+                        <div className="adm-table__primary">{b.name}</div>
+                        <div className="adm-table__secondary">{b.email}</div>
+                      </td>
+                      <td>{b.eventType}</td>
+                      <td style={{ whiteSpace: 'nowrap' }}>{formatDate(b.date)}</td>
+                      <td>{b.guestRange || '—'}</td>
+                      <td>{b.venue || '—'}</td>
+                      <td>{b.package || '—'}</td>
+                      <td><StatusBadge status={b.status} /></td>
+                      <td>
+                        <div className="adm-actions-row">
                           <button
-                            className="adm-action-btn adm-action-btn--approve"
-                            title="Approve"
-                            onClick={() => updateStatus(b.id, 'Approved')}
-                            aria-label={`Approve ${b.id}`}
+                            className="adm-action-btn"
+                            title="View / Edit Notes"
+                            aria-label={`Expand ${b.id}`}
+                            style={{ fontSize: '0.75rem' }}
+                            onClick={() => setExpanded(expanded === b.id ? null : b.id)}
                           >
-                            ✓
+                            {expanded === b.id ? '▲' : '👁'}
                           </button>
+                          {b.status === 'Pending' && (
+                            <>
+                              <button
+                                className="adm-action-btn adm-action-btn--approve"
+                                title="Approve"
+                                onClick={() => updateStatus(b.id, 'Approved')}
+                                aria-label={`Approve ${b.id}`}
+                              >✓</button>
+                              <button
+                                className="adm-action-btn adm-action-btn--reject"
+                                title="Reject"
+                                onClick={() => updateStatus(b.id, 'Rejected')}
+                                aria-label={`Reject ${b.id}`}
+                              >✕</button>
+                            </>
+                          )}
+                          {b.status === 'Approved' && (
+                            <button
+                              className="adm-action-btn adm-action-btn--done"
+                              title="Mark as Completed"
+                              onClick={() => updateStatus(b.id, 'Completed')}
+                              aria-label={`Complete ${b.id}`}
+                              style={{ fontSize: '0.75rem' }}
+                            >✔✔</button>
+                          )}
                           <button
                             className="adm-action-btn adm-action-btn--reject"
-                            title="Reject"
-                            onClick={() => updateStatus(b.id, 'Rejected')}
-                            aria-label={`Reject ${b.id}`}
-                          >
-                            ✕
-                          </button>
-                        </>
-                      )}
-                      {b.status === 'Approved' && (
-                        <button
-                          className="adm-action-btn adm-action-btn--done"
-                          title="Mark as Completed"
-                          onClick={() => updateStatus(b.id, 'Completed')}
-                          aria-label={`Complete ${b.id}`}
-                          style={{ fontSize: '0.75rem' }}
-                        >
-                          ✔✔
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                            title="Delete"
+                            onClick={() => deleteBooking(b.id)}
+                            aria-label={`Delete ${b.id}`}
+                            style={{ fontSize: '0.65rem' }}
+                          >🗑</button>
+                        </div>
+                      </td>
+                    </tr>
+                    {expanded === b.id && (
+                      <tr key={`${b.id}-detail`} className="adm-expanded-row">
+                        <td colSpan={9}>
+                          <div className="adm-expanded">
+                            <div className="adm-expanded__cols">
+                              <div>
+                                <strong style={{ fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--clr-muted)' }}>Booking Details</strong>
+                                <div style={{ marginTop: 'var(--sp-3)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--sp-2) var(--sp-6)', fontSize: 'var(--fs-sm)' }}>
+                                  {[
+                                    ['Phone', b.phone],
+                                    ['Email', b.email],
+                                    ['Guest Range', b.guestRange],
+                                    ['Submitted', formatDate(b.createdAt)],
+                                  ].map(([k, v]) => (
+                                    <div key={k}>
+                                      <span style={{ color: 'var(--clr-muted)' }}>{k}: </span>
+                                      <span style={{ fontWeight: 500 }}>{v || '—'}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                                {b.addons && b.addons.length > 0 && (
+                                  <div style={{ marginTop: 'var(--sp-3)', fontSize: 'var(--fs-sm)' }}>
+                                    <span style={{ color: 'var(--clr-muted)' }}>Add-ons: </span>
+                                    <span style={{ fontWeight: 500 }}>{b.addons.join(', ')}</span>
+                                  </div>
+                                )}
+                                {b.notes && (
+                                  <div style={{ marginTop: 'var(--sp-3)', fontSize: 'var(--fs-sm)' }}>
+                                    <span style={{ color: 'var(--clr-muted)' }}>Customer Notes: </span>
+                                    <em style={{ color: 'var(--clr-body)' }}>{b.notes}</em>
+                                  </div>
+                                )}
+                              </div>
+                              <div>
+                                <strong style={{ fontSize: 'var(--fs-xs)', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--clr-muted)' }}>Admin Notes <span style={{ textTransform: 'none', letterSpacing: 0, color: 'var(--clr-gold-dim)' }}>(shown to customer)</span></strong>
+                                <div style={{ marginTop: 'var(--sp-3)' }}>
+                                  <NotesEditor booking={b} onSave={saveNotes} />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         {/* Footer count */}
         <div style={{ padding: '0.75rem 1.5rem', borderTop: '1px solid var(--clr-border-lt)', fontSize: 'var(--fs-xs)', color: 'var(--clr-muted)', display: 'flex', justifyContent: 'space-between' }}>
-          <span>Showing {filtered.length} of {bookings.length} requests</span>
+          <span>Showing {filtered.length} of {bookings.length} bookings</span>
           <span>Last updated: {new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
         </div>
       </div>

@@ -14,6 +14,7 @@ import Contact from './pages/Contact/Contact';
 import Login from './pages/Login/Login';
 import MyBookings from './pages/Login/MyBookings';
 import Booking from './pages/Booking/Booking';
+import TrackBooking from './pages/Track/TrackBooking';
 
 // Admin pages
 import AdminLogin    from './pages/Admin/AdminLogin';
@@ -52,9 +53,10 @@ function AppContent() {
           <Route path="/gallery"      element={<Gallery />} />
           <Route path="/packages"     element={<Packages />} />
           <Route path="/contact"      element={<Contact />} />
+          <Route path="/booking"      element={<Booking />} />
+          <Route path="/track"        element={<TrackBooking />} />
           <Route path="/login"        element={<Login />} />
           <Route path="/my-bookings"  element={<MyBookings />} />
-          <Route path="/booking"      element={<Booking />} />
 
           {/* ── Admin routes ── */}
           <Route path="/admin/login"  element={<AdminLogin />} />
