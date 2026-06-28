@@ -23,7 +23,12 @@ export default function VenuesPreview() {
   const [venues, setVenues] = useState(fallbackVenues);
 
   useEffect(() => {
-    axios.get(`${API}/api/venues`).then(r => setVenues(r.data)).catch(() => {});
+    axios.get(`${API}/api/venues`)
+      .then(r => {
+        const list = r.data?.venues || r.data;
+        if (Array.isArray(list) && list.length > 0) setVenues(list);
+      })
+      .catch(() => {});
   }, []);
 
   return (

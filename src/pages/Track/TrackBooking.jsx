@@ -42,7 +42,7 @@ export default function TrackBooking() {
       const res = await axios.get(`${API}/api/bookings/track`, {
         params: { id: form.id.trim(), phone: form.phone.trim() },
       });
-      setBooking(res.data);
+      setBooking(res.data?.booking || res.data);
     } catch (err) {
       if (err.response?.status === 404) {
         setError('No booking found with this ID and phone number combination. Please check your details and try again.');

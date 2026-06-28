@@ -29,7 +29,8 @@ export default function AdminDashboard() {
   const fetchBookings = useCallback(async () => {
     try {
       const res = await axios.get(`${API}/api/bookings`);
-      setBookings(res.data);
+      // New backend wraps as { success, bookings } — support both shapes
+      setBookings(res.data?.bookings || res.data || []);
     } catch {
       console.warn('Failed to fetch bookings from backend.');
     } finally {
@@ -42,7 +43,7 @@ export default function AdminDashboard() {
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(`${API}/api/bookings/${id}`, { status });
-      setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b));
+      setBookings(prev => prev.map(b => (b.bookingId || b.id) === id ? { ...b, status } : b));
     } catch {
       alert('Failed to update status.');
     }
@@ -150,9 +151,11 @@ export default function AdminDashboard() {
                     <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: 'var(--clr-muted)' }}>Loading…</td></tr>
                   ) : recent.length === 0 ? (
                     <tr><td colSpan={6} style={{ textAlign: 'center', padding: '2rem', color: 'var(--clr-muted)' }}>No bookings yet</td></tr>
-                  ) : recent.map(b => (
-                    <tr key={b.id}>
-                      <td><span className="adm-table__id">{b.id}</span></td>
+                  ) : recent.map(b => {
+                    const bId = b.bookingId || b.id;
+                    return (
+                    <tr key={bId}>
+                      <td><span className="adm-table__id">{bId}</span></td>
                       <td>
                         <div className="adm-table__primary">{b.name}</div>
                         <div className="adm-table__secondary">{b.venue}</div>
@@ -175,12 +178,12 @@ export default function AdminDashboard() {
                               <button
                                 className="adm-action-btn adm-action-btn--approve"
                                 title="Approve"
-                                onClick={() => updateStatus(b.id, 'Approved')}
+                                onClick={() => updateStatus(bId, 'Approved')}
                               >✓</button>
                               <button
                                 className="adm-action-btn adm-action-btn--reject"
                                 title="Reject"
-                                onClick={() => updateStatus(b.id, 'Rejected')}
+                                onClick={() => updateStatus(bId, 'Rejected')}
                               >✕</button>
                             </>
                           )}
@@ -188,14 +191,15 @@ export default function AdminDashboard() {
                             <button
                               className="adm-action-btn adm-action-btn--done"
                               title="Mark Done"
-                              onClick={() => updateStatus(b.id, 'Completed')}
+                              onClick={() => updateStatus(bId, 'Completed')}
                               style={{ fontSize: '0.65rem' }}
                             >✔✔</button>
                           )}
                         </div>
                       </td>
                     </tr>
-                  ))}
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -251,7 +255,7 @@ export default function AdminDashboard() {
                 Needs Attention
               </div>
               {bookings.filter(b => b.status === 'Pending').slice(0, 3).map(b => (
-                <div key={b.id} className="adm-upcoming-item">
+                <div key={b.bookingId || b.id} className="adm-upcoming-item">
                   <div className="adm-upcoming-date">
                     <span className="adm-upcoming-date__day">
                       {b.date ? new Date(b.date + 'T00:00:00').getDate() : '—'}

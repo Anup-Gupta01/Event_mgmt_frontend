@@ -14,15 +14,57 @@ const venueImages = {
   'maharani-suite': '/maharani_suite.png',
 };
 
+const FALLBACK_VENUES = {
+  'darbar-hall': {
+    name: 'Darbar Hall', category: 'Grand Ballroom', capacity: 800, area: '12,000 sq ft',
+    pricePerDay: 250000,
+    description: 'The grandest hall of Raj Mahal — adorned with hand-carved marble pillars, Rajputana frescoes, and a 40-foot gold-leaf ceiling. Perfect for grand royal weddings and state banquets.',
+    features: ['Marble flooring', 'Gold-leaf ceiling', '5-ton chandelier', 'In-built stage', 'Green room', 'Pre-function lawn'],
+    amenities: ['Wi-Fi', 'Air-conditioning', 'Valet parking', 'In-house catering', 'AV system', 'Bridal suite'],
+  },
+  'jasmine-pavilion': {
+    name: 'Jasmine Pavilion', category: 'Garden Venue', capacity: 350, area: '6,500 sq ft',
+    pricePerDay: 150000,
+    description: 'An elegant indoor-outdoor pavilion surrounded by manicured jasmine gardens. The most sought-after venue for intimate weddings and reception ceremonies.',
+    features: ['Garden-view glass walls', 'Outdoor terrace', 'Bridal suite', 'Floral décor included', 'Private garden access', 'Fountain courtyard'],
+    amenities: ['Wi-Fi', 'Climate control', 'Valet parking', 'In-house catering', 'Sound system', 'Changing rooms'],
+  },
+  'rooftop-terrace': {
+    name: 'Rooftop Terrace', category: 'Open Air', capacity: 200, area: '4,000 sq ft',
+    pricePerDay: 90000,
+    description: 'An open-air terrace with panoramic views of the Jaipur skyline and the Aravalli hills at sunset. Perfect for cocktail evenings and Sangeet celebrations.',
+    features: ['360° skyline view', 'Retractable shade canopy', 'Outdoor bar counter', 'Custom lighting rig', 'Lounge seating area', 'Backdrop for photos'],
+    amenities: ['Wi-Fi', 'Outdoor sound system', 'Valet parking', 'Bar setup', 'Event lighting', 'Weather backup plan'],
+  },
+  'maharani-suite': {
+    name: 'Maharani Suite', category: 'Private Suite', capacity: 80, area: '2,200 sq ft',
+    pricePerDay: 55000,
+    description: 'An exclusive boardroom-style venue styled in deep teal and antique gold — ideal for high-level corporate meetings, private dinners, and milestone celebrations.',
+    features: ['Boardroom layout', 'Private lounge', 'Dedicated butler', 'Projector & screen', 'Private bar', 'Adjoining garden access'],
+    amenities: ['Wi-Fi', 'Video conferencing', 'Valet parking', 'Butler service', 'Projector', 'Private dining'],
+  },
+};
+
 export default function VenueDetail() {
   const { slug } = useParams();
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setLoading(true);
+    setVenue(null);
     axios.get(`${API}/api/venues/${slug}`)
-      .then(r => { setVenue(r.data); setLoading(false); })
-      .catch(() => setLoading(false));
+      .then(r => {
+        // Backend wraps as { success, venue } — support both shapes
+        const v = r.data?.venue || r.data;
+        setVenue(v && v.name ? v : FALLBACK_VENUES[slug] || null);
+      })
+      .catch(() => {
+        // API down or venue not in DB yet — use static fallback
+        setVenue(FALLBACK_VENUES[slug] || null);
+      })
+      .finally(() => setLoading(false));
   }, [slug]);
 
   if (loading) return <div className="page-loading">Loading venue details...</div>;

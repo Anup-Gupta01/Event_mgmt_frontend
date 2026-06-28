@@ -24,8 +24,10 @@ function NotesEditor({ booking, onSave }) {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await axios.patch(`${API}/api/bookings/${booking.id}`, { adminNotes: notes });
-      onSave(booking.id, notes);
+      // Use bookingId (BK-2026-001) for API route; fallback to id for old data
+      const routeId = booking.bookingId || booking.id;
+      await axios.patch(`${API}/api/bookings/${routeId}`, { adminNotes: notes });
+      onSave(routeId, notes);
     } catch {
       alert('Failed to save notes. Please try again.');
     }
@@ -63,7 +65,8 @@ export default function AdminBookings() {
   const fetchBookings = useCallback(async () => {
     try {
       const res = await axios.get(`${API}/api/bookings`);
-      setBookings(res.data);
+      // New backend wraps as { success, bookings } — support both shapes
+      setBookings(res.data?.bookings || res.data || []);
     } catch {
       console.warn('Failed to fetch bookings from backend.');
     } finally {
@@ -76,21 +79,21 @@ export default function AdminBookings() {
   const updateStatus = async (id, status) => {
     try {
       await axios.patch(`${API}/api/bookings/${id}`, { status });
-      setBookings(prev => prev.map(b => b.id === id ? { ...b, status } : b));
+      setBookings(prev => prev.map(b => (b.bookingId || b.id) === id ? { ...b, status } : b));
     } catch {
       alert('Failed to update status. Please try again.');
     }
   };
 
   const saveNotes = (id, adminNotes) => {
-    setBookings(prev => prev.map(b => b.id === id ? { ...b, adminNotes } : b));
+    setBookings(prev => prev.map(b => (b.bookingId || b.id) === id ? { ...b, adminNotes } : b));
   };
 
   const deleteBooking = async (id) => {
     if (!window.confirm('Delete this booking? This cannot be undone.')) return;
     try {
       await axios.delete(`${API}/api/bookings/${id}`);
-      setBookings(prev => prev.filter(b => b.id !== id));
+      setBookings(prev => prev.filter(b => (b.bookingId || b.id) !== id));
     } catch {
       alert('Failed to delete booking.');
     }
@@ -176,10 +179,12 @@ export default function AdminBookings() {
                       No bookings found
                     </td>
                   </tr>
-                ) : filtered.map(b => (
+                ) : filtered.map(b => {
+                  const bId = b.bookingId || b.id;
+                  return (
                   <>
-                    <tr key={b.id}>
-                      <td><span className="adm-table__id">{b.id}</span></td>
+                    <tr key={bId}>
+                      <td><span className="adm-table__id">{bId}</span></td>
                       <td>
                         <div className="adm-table__primary">{b.name}</div>
                         <div className="adm-table__secondary">{b.email}</div>
@@ -195,25 +200,25 @@ export default function AdminBookings() {
                           <button
                             className="adm-action-btn"
                             title="View / Edit Notes"
-                            aria-label={`Expand ${b.id}`}
+                            aria-label={`Expand ${bId}`}
                             style={{ fontSize: '0.75rem' }}
-                            onClick={() => setExpanded(expanded === b.id ? null : b.id)}
+                            onClick={() => setExpanded(expanded === bId ? null : bId)}
                           >
-                            {expanded === b.id ? '▲' : '👁'}
+                            {expanded === bId ? '▲' : '👁'}
                           </button>
                           {b.status === 'Pending' && (
                             <>
                               <button
                                 className="adm-action-btn adm-action-btn--approve"
                                 title="Approve"
-                                onClick={() => updateStatus(b.id, 'Approved')}
-                                aria-label={`Approve ${b.id}`}
+                                onClick={() => updateStatus(bId, 'Approved')}
+                                aria-label={`Approve ${bId}`}
                               >✓</button>
                               <button
                                 className="adm-action-btn adm-action-btn--reject"
                                 title="Reject"
-                                onClick={() => updateStatus(b.id, 'Rejected')}
-                                aria-label={`Reject ${b.id}`}
+                                onClick={() => updateStatus(bId, 'Rejected')}
+                                aria-label={`Reject ${bId}`}
                               >✕</button>
                             </>
                           )}
@@ -221,23 +226,23 @@ export default function AdminBookings() {
                             <button
                               className="adm-action-btn adm-action-btn--done"
                               title="Mark as Completed"
-                              onClick={() => updateStatus(b.id, 'Completed')}
-                              aria-label={`Complete ${b.id}`}
+                              onClick={() => updateStatus(bId, 'Completed')}
+                              aria-label={`Complete ${bId}`}
                               style={{ fontSize: '0.75rem' }}
                             >✔✔</button>
                           )}
                           <button
                             className="adm-action-btn adm-action-btn--reject"
                             title="Delete"
-                            onClick={() => deleteBooking(b.id)}
-                            aria-label={`Delete ${b.id}`}
+                            onClick={() => deleteBooking(bId)}
+                            aria-label={`Delete ${bId}`}
                             style={{ fontSize: '0.65rem' }}
                           >🗑</button>
                         </div>
                       </td>
                     </tr>
-                    {expanded === b.id && (
-                      <tr key={`${b.id}-detail`} className="adm-expanded-row">
+                    {expanded === bId && (
+                      <tr key={`${bId}-detail`} className="adm-expanded-row">
                         <td colSpan={9}>
                           <div className="adm-expanded">
                             <div className="adm-expanded__cols">
@@ -280,8 +285,9 @@ export default function AdminBookings() {
                         </td>
                       </tr>
                     )}
-                  </>
-                ))}
+                   </>
+                   );
+                })}
               </tbody>
             </table>
           </div>

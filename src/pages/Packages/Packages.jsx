@@ -115,7 +115,12 @@ export default function Packages() {
   const [packages, setPackages] = useState(fallbackPackages);
 
   useEffect(() => {
-    axios.get(`${API}/api/packages`).then(r => setPackages(r.data)).catch(() => {});
+    axios.get(`${API}/api/packages`)
+      .then(r => {
+        const list = r.data?.packages || r.data;
+        if (Array.isArray(list) && list.length > 0) setPackages(list);
+      })
+      .catch(() => {});
   }, []);
 
   return (

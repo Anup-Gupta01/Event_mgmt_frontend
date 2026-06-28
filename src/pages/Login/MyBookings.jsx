@@ -60,8 +60,10 @@ export default function MyBookings() {
     setLoading(true);
     try {
       const res = await axios.get(`${API}/api/bookings`, { params: { email: user.email } });
+      // New backend wraps as { success, bookings } — support both shapes
+      const list = res.data?.bookings || res.data || [];
       // Normalize status to lowercase for legacy STATUS_META compatibility
-      setBookings(res.data.map(b => ({ ...b, status: b.status?.toLowerCase() || 'pending' })));
+      setBookings(list.map(b => ({ ...b, status: b.status?.toLowerCase() || 'pending' })));
     } catch {
       console.warn('Could not load bookings from API.');
     } finally {

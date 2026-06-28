@@ -91,7 +91,13 @@ export default function Venues() {
   const [activeTab, setActiveTab] = useState('darbar-hall');
 
   useEffect(() => {
-    axios.get(`${API}/api/venues`).then(r => setVenues(r.data)).catch(() => {});
+    axios.get(`${API}/api/venues`)
+      .then(r => {
+        const list = r.data?.venues || r.data;
+        if (Array.isArray(list) && list.length > 0) setVenues(list);
+        // else: keep fallback static data
+      })
+      .catch(() => {}); // keep fallback on error
   }, []);
 
   const active = venues.find(v => v.slug === activeTab) || venues[0];
@@ -238,7 +244,7 @@ export default function Venues() {
           </div>
           <div className="venues-overview-grid">
             {venues.map((v) => (
-              <div key={v.id} className="venue-overview-card" onClick={() => setActiveTab(v.slug)} style={{ cursor: 'pointer' }}>
+              <div key={v._id || v.id} className="venue-overview-card" onClick={() => setActiveTab(v.slug)} style={{ cursor: 'pointer' }}>
                 <div className="venue-overview-card__img-wrap">
                   <img src={venueImages[v.slug]} alt={v.name} />
                   <div className="venue-overview-card__overlay" />
