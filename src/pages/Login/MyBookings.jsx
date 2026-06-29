@@ -201,11 +201,11 @@ export default function MyBookings() {
         {/* ── Filter Tabs ───────────────────────────────────────────────── */}
         <div className="mb-filters">
           {[
-            { key: 'all',       label: 'All Bookings',   count: BOOKINGS.length },
-            { key: 'approved',  label: 'Approved',       count: BOOKINGS.filter(b => b.status === 'approved').length  },
-            { key: 'pending',   label: 'Pending',        count: BOOKINGS.filter(b => b.status === 'pending').length   },
-            { key: 'completed', label: 'Completed',      count: BOOKINGS.filter(b => b.status === 'completed').length },
-            { key: 'rejected',  label: 'Rejected',       count: BOOKINGS.filter(b => b.status === 'rejected').length  },
+            { key: 'all',       label: 'All Bookings',   count: bookings.length },
+            { key: 'approved',  label: 'Approved',       count: bookings.filter(b => b.status === 'approved').length  },
+            { key: 'pending',   label: 'Pending',        count: bookings.filter(b => b.status === 'pending').length   },
+            { key: 'completed', label: 'Completed',      count: bookings.filter(b => b.status === 'completed').length },
+            { key: 'rejected',  label: 'Rejected',       count: bookings.filter(b => b.status === 'rejected').length  },
           ].map(f => (
             <button
               key={f.key}
