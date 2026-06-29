@@ -18,6 +18,7 @@ import TrackBooking from './pages/Track/TrackBooking';
 
 // Admin pages
 import AdminLogin    from './pages/Admin/AdminLogin';
+import AdminSignup   from './pages/Admin/AdminSignup';
 import AdminLayout   from './pages/Admin/AdminLayout';
 import AdminDashboard from './pages/Admin/AdminDashboard';
 import AdminBookings  from './pages/Admin/AdminBookings';
@@ -59,14 +60,15 @@ function AppContent() {
           <Route path="/my-bookings"  element={<MyBookings />} />
 
           {/* ── Admin routes ── */}
-          <Route path="/admin/login"  element={<AdminLogin />} />
-          <Route path="/admin"        element={<AdminLayout />}>
-            <Route index              element={<Navigate to="/admin/dashboard" replace />} />
-            <Route path="dashboard"   element={<AdminDashboard />} />
-            <Route path="bookings"    element={<AdminBookings />} />
-            <Route path="services"    element={<AdminServices />} />
-            <Route path="packages"    element={<AdminPackages />} />
-            <Route path="calendar"    element={<AdminCalendar />} />
+          <Route path="/admin/login"   element={<AdminLogin />} />
+          <Route path="/admin/signup"  element={<AdminSignup />} />
+          <Route path="/admin"         element={<AdminLayout />}>
+            <Route index               element={<Navigate to="/admin/dashboard" replace />} />
+            <Route path="dashboard"    element={<AdminDashboard />} />
+            <Route path="bookings"     element={<AdminBookings />} />
+            <Route path="services"     element={<AdminServices />} />
+            <Route path="packages"     element={<AdminPackages />} />
+            <Route path="calendar"     element={<AdminCalendar />} />
           </Route>
         </Routes>
       </main>

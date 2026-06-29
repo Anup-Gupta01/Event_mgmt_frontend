@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api';
 import '../About/About.css';
 import './Contact.css';
 
-const API = 'http://localhost:5000';
 
 const eventTypes = ['Wedding', 'Corporate', 'Social Event', 'Exhibition', 'Birthday', 'Anniversary', 'Other'];
 const venueOptions = ['Darbar Hall', 'Jasmine Pavilion', 'Rooftop Terrace', 'Maharani Suite', 'Not sure yet'];
@@ -60,7 +59,7 @@ export default function Contact() {
     setStatus('loading');
     setError('');
     try {
-      await axios.post(`${API}/api/inquiries`, form);
+      await api.post('/api/inquiries', form);
       setStatus('success');
     } catch (err) {
       setStatus('error');

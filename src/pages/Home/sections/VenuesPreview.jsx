@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../../utils/api';
 import './VenuesPreview.css';
 
-const API = 'http://localhost:5000';
 
 const fallbackVenues = [
   { id:'1', name:'Darbar Hall', capacity:800, category:'Grand', description:'The grandest hall of Raj Mahal — adorned with hand-carved marble pillars, Rajputana frescoes, and a 40-foot gold-leaf ceiling.', slug:'darbar-hall' },
@@ -23,7 +22,7 @@ export default function VenuesPreview() {
   const [venues, setVenues] = useState(fallbackVenues);
 
   useEffect(() => {
-    axios.get(`${API}/api/venues`)
+    api.get('/api/venues')
       .then(r => {
         const list = r.data?.venues || r.data;
         if (Array.isArray(list) && list.length > 0) setVenues(list);

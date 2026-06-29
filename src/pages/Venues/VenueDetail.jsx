@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api';
 import '../About/About.css';
 import './Venues.css';
 import './VenueDetail.css';
 
-const API = 'http://localhost:5000';
 
 const venueImages = {
   'darbar-hall': '/darbar_hall.png',
@@ -54,7 +53,7 @@ export default function VenueDetail() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setLoading(true);
     setVenue(null);
-    axios.get(`${API}/api/venues/${slug}`)
+    api.get('/api/venues/${slug}')
       .then(r => {
         // Backend wraps as { success, venue } — support both shapes
         const v = r.data?.venue || r.data;

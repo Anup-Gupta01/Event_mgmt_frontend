@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api';
 import './TrackBooking.css';
-
-const API = 'http://localhost:5000';
 
 const STATUS_CONFIG = {
   Pending:   { cls: 'track-badge--pending',   icon: '⏳', label: 'Pending Review',   msg: 'Your booking request has been received and is under review by our team.' },
@@ -39,7 +37,7 @@ export default function TrackBooking() {
     setBooking(null);
     setSearched(true);
     try {
-      const res = await axios.get(`${API}/api/bookings/track`, {
+      const res = await api.get('/api/bookings/track', {
         params: { id: form.id.trim(), phone: form.phone.trim() },
       });
       setBooking(res.data?.booking || res.data);

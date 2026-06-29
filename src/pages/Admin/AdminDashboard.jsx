@@ -1,9 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api';
 import './Admin.css';
-
-const API = 'http://localhost:5000';
 
 const STATUS_MAP = {
   Pending:   'adm-badge--pending',
@@ -28,8 +26,7 @@ export default function AdminDashboard() {
 
   const fetchBookings = useCallback(async () => {
     try {
-      const res = await axios.get(`${API}/api/bookings`);
-      // New backend wraps as { success, bookings } — support both shapes
+      const res = await api.get('/api/bookings');
       setBookings(res.data?.bookings || res.data || []);
     } catch {
       console.warn('Failed to fetch bookings from backend.');
@@ -42,7 +39,7 @@ export default function AdminDashboard() {
 
   const updateStatus = async (id, status) => {
     try {
-      await axios.patch(`${API}/api/bookings/${id}`, { status });
+      await api.patch(`/api/bookings/${id}`, { status });
       setBookings(prev => prev.map(b => (b.bookingId || b.id) === id ? { ...b, status } : b));
     } catch {
       alert('Failed to update status.');

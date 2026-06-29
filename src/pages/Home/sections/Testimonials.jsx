@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../../utils/api';
 import './Testimonials.css';
 
-const API = 'http://localhost:5000';
 
 const fallback = [
   { id:'1', name:'Priya & Rohan Mehta', event:'Wedding — Darbar Hall', rating:5, text:'Raj Mahal turned our wedding into a fairy tale. Every pillar, every flower, every moment was curated to perfection. Our guests still talk about it six months later.', location:'Mumbai' },
@@ -24,7 +23,7 @@ export default function Testimonials() {
   const [active, setActive] = useState(0);
 
   useEffect(() => {
-    axios.get(`${API}/api/testimonials`).then(r => setItems(r.data)).catch(() => {});
+    api.get('/api/testimonials').then(r => setItems(r.data)).catch(() => {});
   }, []);
 
   return (

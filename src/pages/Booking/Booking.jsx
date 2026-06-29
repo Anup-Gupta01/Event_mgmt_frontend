@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api';
+import { useAuth } from '../../context/AuthContext';
 import '../About/About.css';
 import './Booking.css';
 
-const API = 'http://localhost:5000';
 
 /* ── Static data ─────────────────────────────────────────────────────────── */
 const eventTypes = [
@@ -649,7 +649,7 @@ export default function Booking() {
     setSubmitting(true);
     setError('');
     try {
-      const res = await axios.post(`${API}/api/bookings`, {
+      const res = await api.post('/api/bookings', {
         name:       data.name,
         email:      data.email,
         phone:      data.phone,

@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../utils/api';
 import { Link } from 'react-router-dom';
 import './Admin.css';
 
-const API = 'http://localhost:5000';
 const STATUSES = ['New', 'Pending', 'Confirmed', 'Declined'];
 
 function formatDate(iso) {
@@ -24,7 +23,7 @@ export default function Admin() {
   const [filterStatus, setFilterStatus] = useState('All');
 
   const load = () => {
-    axios.get(`${API}/api/inquiries`)
+    api.get('/api/inquiries')
       .then(r => { setInquiries(r.data); setLoading(false); })
       .catch(() => setLoading(false));
   };
@@ -32,14 +31,14 @@ export default function Admin() {
   useEffect(() => { load(); }, []);
 
   const updateStatus = async (id, status) => {
-    await axios.patch(`${API}/api/inquiries/${id}`, { status });
+    await api.patch('/api/inquiries/${id}', { status });
     setInquiries(prev => prev.map(i => i.id === id ? { ...i, status } : i));
     if (selected?.id === id) setSelected(s => ({ ...s, status }));
   };
 
   const deleteInquiry = async (id) => {
     if (!window.confirm('Delete this inquiry?')) return;
-    await axios.delete(`${API}/api/inquiries/${id}`);
+    await api.delete('/api/inquiries/${id}');
     setInquiries(prev => prev.filter(i => i.id !== id));
     if (selected?.id === id) setSelected(null);
   };

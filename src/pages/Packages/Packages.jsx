@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api';
 import '../About/About.css';
 import './Packages.css';
 
-const API = 'http://localhost:5000';
 
 const fallbackPackages = [
   {
@@ -115,7 +114,7 @@ export default function Packages() {
   const [packages, setPackages] = useState(fallbackPackages);
 
   useEffect(() => {
-    axios.get(`${API}/api/packages`)
+    api.get('/api/packages')
       .then(r => {
         const list = r.data?.packages || r.data;
         if (Array.isArray(list) && list.length > 0) setPackages(list);

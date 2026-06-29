@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api';
 import './Venues.css';
 import '../About/About.css';
 
-const API = 'http://localhost:5000';
 
 const fallback = [
   {
@@ -91,7 +90,7 @@ export default function Venues() {
   const [activeTab, setActiveTab] = useState('darbar-hall');
 
   useEffect(() => {
-    axios.get(`${API}/api/venues`)
+    api.get('/api/venues')
       .then(r => {
         const list = r.data?.venues || r.data;
         if (Array.isArray(list) && list.length > 0) setVenues(list);

@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import api from '../../utils/api';
 import './Admin.css';
 
-const API = 'http://localhost:5000';
 
 function formatDate(iso) {
   if (!iso) return '—';
@@ -24,9 +23,8 @@ function NotesEditor({ booking, onSave }) {
   const handleSave = async () => {
     setSaving(true);
     try {
-      // Use bookingId (BK-2026-001) for API route; fallback to id for old data
       const routeId = booking.bookingId || booking.id;
-      await axios.patch(`${API}/api/bookings/${routeId}`, { adminNotes: notes });
+      await api.patch(`/api/bookings/${routeId}`, { adminNotes: notes });
       onSave(routeId, notes);
     } catch {
       alert('Failed to save notes. Please try again.');
@@ -64,8 +62,7 @@ export default function AdminBookings() {
 
   const fetchBookings = useCallback(async () => {
     try {
-      const res = await axios.get(`${API}/api/bookings`);
-      // New backend wraps as { success, bookings } — support both shapes
+      const res = await api.get('/api/bookings');
       setBookings(res.data?.bookings || res.data || []);
     } catch {
       console.warn('Failed to fetch bookings from backend.');
@@ -78,7 +75,7 @@ export default function AdminBookings() {
 
   const updateStatus = async (id, status) => {
     try {
-      await axios.patch(`${API}/api/bookings/${id}`, { status });
+      await api.patch(`/api/bookings/${id}`, { status });
       setBookings(prev => prev.map(b => (b.bookingId || b.id) === id ? { ...b, status } : b));
     } catch {
       alert('Failed to update status. Please try again.');
@@ -92,7 +89,7 @@ export default function AdminBookings() {
   const deleteBooking = async (id) => {
     if (!window.confirm('Delete this booking? This cannot be undone.')) return;
     try {
-      await axios.delete(`${API}/api/bookings/${id}`);
+      await api.delete(`/api/bookings/${id}`);
       setBookings(prev => prev.filter(b => (b.bookingId || b.id) !== id));
     } catch {
       alert('Failed to delete booking.');

@@ -1,31 +1,50 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import api from '../../utils/api';
+import { useAuth } from '../../context/AuthContext';
 import './Admin.css';
 
 export default function AdminLogin() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ username: '', password: '', remember: false });
+  const { login, isAdmin } = useAuth();
+
+  // Redirect if already logged in as admin
+  if (isAdmin) {
+    navigate('/admin/dashboard', { replace: true });
+  }
+
+  const [form, setForm] = useState({ email: '', password: '' });
   const [showPass, setShowPass] = useState(false);
   const [status, setStatus] = useState(null); // null | 'loading' | 'error'
   const [errMsg, setErrMsg] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus('loading');
-    // Demo authentication: admin / admin123
-    setTimeout(() => {
-      if (form.username === 'admin' && form.password === 'admin123') {
-        if (form.remember) {
-          localStorage.setItem('isAdminAuthenticated', 'true');
-        } else {
-          sessionStorage.setItem('isAdminAuthenticated', 'true');
-        }
-        navigate('/admin/dashboard');
-      } else {
+    setErrMsg('');
+
+    try {
+      const res = await api.post('/api/auth/login', {
+        email: form.email,
+        password: form.password,
+      });
+      const data = res.data;
+
+      if (!data.success) throw new Error(data.message || 'Login failed');
+
+      // Verify admin role
+      if (data.user.role !== 'admin') {
         setStatus('error');
-        setErrMsg('Invalid credentials. Use admin / admin123 for demo access.');
+        setErrMsg('Access denied. This portal is for administrators only.');
+        return;
       }
-    }, 1000);
+
+      login(data); // store token + user
+      navigate('/admin/dashboard', { replace: true });
+    } catch (err) {
+      setStatus('error');
+      setErrMsg(err.response?.data?.message || err.message || 'Invalid credentials. Please try again.');
+    }
   };
 
   return (
@@ -36,16 +55,16 @@ export default function AdminLogin() {
       <div className="al-card">
         {/* Brand */}
         <div className="al-brand">
-          <div className="al-brand__icon">‚ú¶</div>
+          <div className="al-brand__icon">?</div>
           <div>
             <div className="al-brand__name">Raj Mahal</div>
-            <div className="al-brand__sub">Est. 1947 ¬∑ Jaipur</div>
+            <div className="al-brand__sub">Est. 1947 ∑ Jaipur</div>
           </div>
         </div>
 
         {/* Header */}
         <div className="al-header">
-          <div className="al-lock">üîê</div>
+          <div className="al-lock">??</div>
           <h1 className="al-title">Admin Portal</h1>
           <p className="al-sub">
             Restricted access. Authorised personnel only.<br />
@@ -56,7 +75,7 @@ export default function AdminLogin() {
         {/* Error alert */}
         {status === 'error' && (
           <div className="al-alert al-alert--error" style={{ marginBottom: '1.25rem' }}>
-            <span className="al-alert__icon">‚ö†</span>
+            <span className="al-alert__icon">?</span>
             <span>{errMsg}</span>
           </div>
         )}
@@ -64,16 +83,16 @@ export default function AdminLogin() {
         {/* Form */}
         <form className="al-form" onSubmit={handleSubmit} noValidate>
           <div className="al-form-group">
-            <label className="al-label" htmlFor="admin-username">Username</label>
+            <label className="al-label" htmlFor="admin-email">Email Address</label>
             <div className="al-input-wrap">
               <input
-                id="admin-username"
-                type="text"
+                id="admin-email"
+                type="email"
                 className="al-input"
-                placeholder="admin"
-                autoComplete="username"
-                value={form.username}
-                onChange={e => setForm(f => ({ ...f, username: e.target.value }))}
+                placeholder="admin@rajmahal.com"
+                autoComplete="email"
+                value={form.email}
+                onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                 required
               />
             </div>
@@ -86,7 +105,7 @@ export default function AdminLogin() {
                 id="admin-password"
                 type={showPass ? 'text' : 'password'}
                 className="al-input"
-                placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"
+                placeholder="ïïïïïïïï"
                 autoComplete="current-password"
                 value={form.password}
                 onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
@@ -115,18 +134,6 @@ export default function AdminLogin() {
             </div>
           </div>
 
-          <div className="al-row">
-            <label className="al-remember">
-              <input
-                type="checkbox"
-                checked={form.remember}
-                onChange={e => setForm(f => ({ ...f, remember: e.target.checked }))}
-              />
-              <span>Stay signed in</span>
-            </label>
-            <a href="#" className="al-forgot">Forgot password?</a>
-          </div>
-
           <button
             id="admin-login-btn"
             type="submit"
@@ -134,17 +141,20 @@ export default function AdminLogin() {
             disabled={status === 'loading'}
           >
             {status === 'loading' ? (
-              <><span className="al-spinner" /> Verifying‚Ä¶</>
-            ) : 'Access Admin Portal ‚Üí'}
+              <><span className="al-spinner" /> VerifyingÖ</>
+            ) : 'Access Admin Portal ?'}
           </button>
         </form>
 
         {/* Footer */}
         <div className="al-footer">
           <p className="al-footer__text">Not an admin?</p>
-          <Link to="/login" className="al-footer__link">
-            ‚Üê Go to Customer Login
-          </Link>
+          <Link to="/login" className="al-footer__link">? Go to Customer Login</Link>
+          <div style={{ marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+            <Link to="/admin/signup" className="al-footer__link" style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+              + Register new admin account
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -1,28 +1,50 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import api from '../../utils/api';
+import { useAuth } from '../../context/AuthContext';
 import './Login.css';
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [tab, setTab] = useState('login');
   const [loginForm, setLoginForm] = useState({ email: '', password: '', remember: false });
   const [regForm, setRegForm]     = useState({ name: '', email: '', phone: '', password: '', confirm: '' });
   const [showLoginPass, setShowLoginPass] = useState(false);
   const [showRegPass, setShowRegPass]     = useState(false);
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState(null); // null | 'loading' | 'success' | 'error'
   const [message, setMessage] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setStatus('loading');
-    setTimeout(() => {
+    setMessage('');
+    try {
+      const res = await api.post('/api/auth/login', {
+        email: loginForm.email,
+        password: loginForm.password,
+      });
+      const data = res.data;
+      if (!data.success) throw new Error(data.message || 'Login failed');
+
+      // Block admin accounts from customer portal
+      if (data.user.role === 'admin') {
+        setStatus('error');
+        setMessage('Admin accounts must use the Admin Portal to log in.');
+        return;
+      }
+
+      login(data); // stores token + user in context + localStorage
       setStatus('success');
-      setMessage('Welcome back! Redirecting to your portalâ€¦');
-      setTimeout(() => navigate('/my-bookings'), 1200);
-    }, 1200);
+      setMessage('Welcome back! Redirecting to your portal…');
+      setTimeout(() => navigate('/my-bookings'), 1000);
+    } catch (err) {
+      setStatus('error');
+      setMessage(err.response?.data?.message || err.message || 'Login failed. Please try again.');
+    }
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (regForm.password !== regForm.confirm) {
       setStatus('error');
@@ -30,11 +52,25 @@ export default function Login() {
       return;
     }
     setStatus('loading');
-    setTimeout(() => {
+    setMessage('');
+    try {
+      const res = await api.post('/api/auth/register', {
+        name: regForm.name,
+        email: regForm.email,
+        phone: regForm.phone,
+        password: regForm.password,
+      });
+      const data = res.data;
+      if (!data.success) throw new Error(data.message || 'Registration failed');
+
+      login(data); // auto-login after registration
       setStatus('success');
-      setMessage('Account created successfully! You can now sign in.');
-      setTimeout(() => switchTab('login'), 1500);
-    }, 1400);
+      setMessage('Account created! Redirecting to your portal…');
+      setTimeout(() => navigate('/my-bookings'), 1000);
+    } catch (err) {
+      setStatus('error');
+      setMessage(err.response?.data?.message || err.message || 'Registration failed. Please try again.');
+    }
   };
 
   const switchTab = (t) => { setTab(t); setStatus(null); setMessage(''); };
@@ -46,13 +82,13 @@ export default function Login() {
       <div className="lp-orb lp-orb--2" />
 
       <div className="lp-card">
-        {/* Card header â€” logo + title */}
+        {/* Card header — logo + title */}
         <div className="lp-header">
           <Link to="/" className="lp-logo">
-            <span className="lp-logo__icon">âœ¦</span>
+            <span className="lp-logo__icon">?</span>
             <div>
               <div className="lp-logo__name">Raj Mahal</div>
-              <div className="lp-logo__sub">Est. 1947 Â· Jaipur</div>
+              <div className="lp-logo__sub">Est. 1947 · Jaipur</div>
             </div>
           </Link>
           <div className="lp-divider" />
@@ -85,18 +121,18 @@ export default function Login() {
         {/* Alert messages */}
         {status === 'success' && (
           <div className="lp-alert lp-alert--success">
-            <span className="lp-alert__icon">âœ“</span>
+            <span className="lp-alert__icon">?</span>
             <span>{message}</span>
           </div>
         )}
         {status === 'error' && (
           <div className="lp-alert lp-alert--error">
-            <span className="lp-alert__icon">âš </span>
+            <span className="lp-alert__icon">?</span>
             <span>{message}</span>
           </div>
         )}
 
-        {/* â”€â”€ Sign In Form â”€â”€ */}
+        {/* -- Sign In Form -- */}
         {tab === 'login' && (
           <form className="lp-form" onSubmit={handleLogin} noValidate>
             <div className="form-group">
@@ -123,7 +159,7 @@ export default function Login() {
                   id="login-pass"
                   type={showLoginPass ? 'text' : 'password'}
                   className="form-input lp-input"
-                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                  placeholder="••••••••"
                   value={loginForm.password}
                   onChange={(e) => setLoginForm(f => ({ ...f, password: e.target.value }))}
                   required
@@ -160,8 +196,8 @@ export default function Login() {
               disabled={status === 'loading'}
             >
               {status === 'loading' && tab === 'login' ? (
-                <><span className="lp-spinner" /> Signing inâ€¦</>
-              ) : 'Sign In â†’'}
+                <><span className="lp-spinner" /> Signing in…</>
+              ) : 'Sign In ?'}
             </button>
 
             <p className="lp-switch">
@@ -173,7 +209,7 @@ export default function Login() {
           </form>
         )}
 
-        {/* â”€â”€ Register Form â”€â”€ */}
+        {/* -- Register Form -- */}
         {tab === 'register' && (
           <form className="lp-form" onSubmit={handleRegister} noValidate>
             <div className="lp-grid-2">
@@ -223,11 +259,11 @@ export default function Login() {
                     id="reg-pass"
                     type={showRegPass ? 'text' : 'password'}
                     className="form-input lp-input"
-                    placeholder="Min. 8 characters"
+                    placeholder="Min. 6 characters"
                     value={regForm.password}
                     onChange={(e) => setRegForm(f => ({ ...f, password: e.target.value }))}
                     required
-                    minLength={8}
+                    minLength={6}
                   />
                   <button type="button" className="lp-eye" onClick={() => setShowRegPass(!showRegPass)} aria-label="Toggle password">
                     {showRegPass ? (
@@ -264,8 +300,8 @@ export default function Login() {
               disabled={status === 'loading'}
             >
               {status === 'loading' && tab === 'register' ? (
-                <><span className="lp-spinner" /> Creating accountâ€¦</>
-              ) : 'Create Account â†’'}
+                <><span className="lp-spinner" /> Creating account…</>
+              ) : 'Create Account ?'}
             </button>
 
             <p className="lp-switch">
@@ -279,9 +315,9 @@ export default function Login() {
 
         {/* Footer links */}
         <div className="lp-footer">
-          <Link to="/" className="lp-footer__link">â† Back to website</Link>
-          <span className="lp-footer__sep">Â·</span>
-          <Link to="/admin" className="lp-footer__link lp-footer__link--admin">Admin Portal</Link>
+          <Link to="/" className="lp-footer__link">? Back to website</Link>
+          <span className="lp-footer__sep">·</span>
+          <Link to="/admin/login" className="lp-footer__link lp-footer__link--admin">Admin Portal</Link>
         </div>
       </div>
     </div>
