@@ -13,12 +13,12 @@ export default function Footer() {
               <div className="footer__logo">
                 <span className="footer__logo-icon">✦</span>
                 <div>
-                  <div className="footer__logo-main">Raj Mahal</div>
-                  <div className="footer__logo-sub">Est. 1947 · Jaipur</div>
+                  <div className="footer__logo-main">EVENTORA</div>
+                  <div className="footer__logo-sub">Events, beautifully managed.</div>
                 </div>
               </div>
               <p className="footer__tagline">
-                Where every occasion becomes a royal memory. Crafting extraordinary events in the heart of Rajasthan since 1947.
+                Where every occasion becomes a premium memory. Crafting extraordinary events with care and precision.
               </p>
               <div className="footer__socials">
                 <a href="#" aria-label="Instagram" className="footer__social-link">𝕀</a>
@@ -59,7 +59,7 @@ export default function Footer() {
                 <p>Palace Road, Near City Palace</p>
                 <p>Jaipur, Rajasthan — 302 001</p>
                 <a href="tel:+911412345678" className="footer__contact-link">+91 141 234 5678</a>
-                <a href="mailto:events@rajmahal.in" className="footer__contact-link">events@rajmahal.in</a>
+                <a href="mailto:events@eventora.in" className="footer__contact-link">events@eventora.in</a>
               </address>
               <div className="footer__hours">
                 <p className="footer__hours-label">Office Hours</p>
@@ -75,7 +75,7 @@ export default function Footer() {
         <div className="container">
           <div className="footer__bottom-inner">
             <p className="footer__copy">
-              © {new Date().getFullYear()} Raj Mahal Palace & Events. All rights reserved.
+              © {new Date().getFullYear()} Eventora. All rights reserved.
             </p>
             <div className="footer__legal">
               <a href="#">Privacy Policy</a>

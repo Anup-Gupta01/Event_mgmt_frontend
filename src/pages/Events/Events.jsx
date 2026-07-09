@@ -8,7 +8,7 @@ const eventTypes = [
     icon: '💍',
     title: 'Royal Weddings',
     tagline: 'A union as timeless as the palace itself',
-    desc: "From the first mehendi to the final farewell, Raj Mahal's wedding team manages every ritual, every detail, every emotion with grace and precision. Our cultural consultants ensure authentic Rajputana traditions are honoured while accommodating modern preferences.",
+    desc: "From the first mehendi to the final farewell, Eventora's wedding team manages every ritual, every detail, every emotion with grace and precision. Our cultural consultants ensure authentic traditions are honoured while accommodating modern preferences.",
     offerings: [
       'Mehendi & Sangeet ceremonies', 'Grand baraat welcome with dhol, nadaswaram & horse processional',
       'Elaborate pheras & sacred mandap', 'Lavish reception banquets up to 800 guests',
@@ -47,7 +47,7 @@ const eventTypes = [
     icon: '🖼',
     title: 'Exhibitions & Cultural Shows',
     tagline: 'Heritage walls for contemporary visions',
-    desc: "Raj Mahal's grand halls provide a rare heritage canvas for fashion weeks, art exhibitions, cultural festivals, and luxury brand showcases. The aesthetic of carved sandstone and gold leaf is an unmatched backdrop that adds prestige and visual depth to any exhibition.",
+    desc: "Eventora's grand halls provide a rare heritage canvas for fashion weeks, art exhibitions, cultural festivals, and luxury brand showcases. The aesthetic of carved sandstone and gold leaf is an unmatched backdrop that adds prestige and visual depth to any exhibition.",
     offerings: [
       'Fashion week runway shows', 'Photography & fine art exhibitions',
       'Cultural heritage performances', 'Luxury brand & jewellery showcases',
@@ -63,7 +63,7 @@ export default function Events() {
       {/* Hero */}
       <div className="page-hero">
         <div className="page-hero__bg">
-          <img src="/wedding_gallery.png" alt="Royal event at Raj Mahal" />
+          <img src="/wedding_gallery.png" alt="Premium event at Eventora" />
           <div className="page-hero__overlay" />
         </div>
         <div className="page-hero__content container">

@@ -5,7 +5,7 @@ import './VenuesPreview.css';
 
 
 const fallbackVenues = [
-  { id:'1', name:'Darbar Hall', capacity:800, category:'Grand', description:'The grandest hall of Raj Mahal — adorned with hand-carved marble pillars, Rajputana frescoes, and a 40-foot gold-leaf ceiling.', slug:'darbar-hall' },
+  { id:'1', name:'Darbar Hall', capacity:800, category:'Grand', description:'The grandest hall at Eventora — adorned with hand-carved marble pillars, Rajputana frescoes, and a 40-foot gold-leaf ceiling.', slug:'darbar-hall' },
   { id:'2', name:'Jasmine Pavilion', capacity:350, category:'Garden', description:'An elegant indoor-outdoor pavilion surrounded by manicured jasmine gardens.', slug:'jasmine-pavilion' },
   { id:'3', name:'Rooftop Terrace', capacity:200, category:'Open Air', description:'An open-air terrace with panoramic views of the city skyline and Rajasthani landscape.', slug:'rooftop-terrace' },
   { id:'4', name:'Maharani Suite', capacity:80, category:'Corporate', description:'An exclusive, intimate boardroom-style venue styled in deep teal and antique gold.', slug:'maharani-suite' },
@@ -38,7 +38,7 @@ export default function VenuesPreview() {
           <h2 className="section-title">Four Legendary <em>Venues</em></h2>
           <div className="divider" />
           <p className="section-subtitle">
-            Each venue within Raj Mahal tells its own story — discover the perfect setting for your occasion.
+            Each venue within Eventora tells its own story — discover the perfect setting for your occasion.
           </p>
         </div>
 

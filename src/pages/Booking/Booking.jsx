@@ -552,7 +552,7 @@ function SuccessScreen({ data, bookingId }) {
         </div>
 
         <p className="booking-success__msg">
-          Thank you for choosing <strong>Raj Mahal Palace & Events</strong>. Your booking request has been submitted successfully. Our dedicated events team will review your requirements and reach out within <strong>24 hours</strong> with a personalised proposal.
+          Thank you for choosing <strong>Eventora</strong>. Your booking request has been submitted successfully. Our dedicated events team will review your requirements and reach out within <strong>24 hours</strong> with a personalised proposal.
         </p>
 
         {/* Summary box */}
@@ -674,12 +674,12 @@ export default function Booking() {
 
   return (
     <div>
-      <title>Book Your Event — Raj Mahal</title>
+      <title>Book Your Event — Eventora</title>
 
       {/* Page hero */}
       <div className="page-hero" style={{ minHeight: '280px', height: '38vh' }}>
         <div className="page-hero__bg">
-          <img src="/hero_palace.png" alt="Raj Mahal Palace" />
+          <img src="/hero_palace.png" alt="Eventora venue" />
           <div className="page-hero__overlay" />
         </div>
         <div className="page-hero__content container">

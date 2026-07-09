@@ -53,7 +53,7 @@ const fallbackPackages = [
   {
     id: '3',
     name: 'Royal',
-    subtitle: 'The Raj Mahal Experience',
+    subtitle: 'The Eventora Experience',
     price: 950000,
     priceUnit: 'per event',
     capacity: 'Up to 1,000 guests',
@@ -124,7 +124,7 @@ export default function Packages() {
 
   return (
     <div>
-      <title>Event Packages — Raj Mahal</title>
+      <title>Event Packages — Eventora</title>
 
       {/* Hero */}
       <div className="page-hero">

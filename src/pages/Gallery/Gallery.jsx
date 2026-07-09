@@ -11,7 +11,7 @@ const galleryItems = [
   { src: '/corporate_gala.png',    alt: 'Corporate awards gala evening',           category: 'Corporate' },
   { src: '/rooftop_terrace.png',   alt: 'Rooftop cocktail soirée at sunset',       category: 'Social' },
   { src: '/maharani_suite.png',    alt: 'Maharani Suite corporate dinner',         category: 'Corporate' },
-  { src: '/hero_palace.png',       alt: 'Raj Mahal palace exterior at golden hour',category: 'Venue' },
+  { src: '/hero_palace.png',       alt: 'Eventora venue exterior at golden hour',category: 'Venue' },
 ];
 
 const filters = ['All', 'Wedding', 'Corporate', 'Social', 'Venue'];

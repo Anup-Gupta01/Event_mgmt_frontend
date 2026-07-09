@@ -1,4 +1,4 @@
-import { useState } from 'react';
+ï»¿import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
@@ -57,8 +57,8 @@ export default function AdminLogin() {
         <div className="al-brand">
           <div className="al-brand__icon">?</div>
           <div>
-            <div className="al-brand__name">Raj Mahal</div>
-            <div className="al-brand__sub">Est. 1947 · Jaipur</div>
+            <div className="al-brand__name">Eventora</div>
+            <div className="al-brand__sub">Est. 1947 ï¿½ Jaipur</div>
           </div>
         </div>
 
@@ -105,7 +105,7 @@ export default function AdminLogin() {
                 id="admin-password"
                 type={showPass ? 'text' : 'password'}
                 className="al-input"
-                placeholder="••••••••"
+                placeholder="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
                 autoComplete="current-password"
                 value={form.password}
                 onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
@@ -141,7 +141,7 @@ export default function AdminLogin() {
             disabled={status === 'loading'}
           >
             {status === 'loading' ? (
-              <><span className="al-spinner" /> Verifying…</>
+              <><span className="al-spinner" /> Verifyingï¿½</>
             ) : 'Access Admin Portal ?'}
           </button>
         </form>

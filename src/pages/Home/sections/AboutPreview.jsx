@@ -29,7 +29,7 @@ export default function AboutPreview() {
             </h2>
             <div className="divider divider--left" />
             <p className="about-preview__body">
-              Nestled in the heart of the Pink City, Raj Mahal has been the canvas for Rajasthan's most treasured celebrations since 1947. What began as a royal guest house of the Maharaja of Pratapgarh has evolved into Jaipur's most sought-after luxury event destination.
+              Nestled in a stunning heritage setting, Eventora has been the canvas for the region's most treasured celebrations. What began as an exclusive private estate has evolved into one of the most sought-after luxury event destinations in the country.
             </p>
             <p className="about-preview__body">
               Our palace spans over 3 acres of manicured grounds, four distinct event venues, a heritage orchid garden, and a culinary team of 120 specialists — all dedicated to transforming your vision into an experience your guests will speak of for generations.

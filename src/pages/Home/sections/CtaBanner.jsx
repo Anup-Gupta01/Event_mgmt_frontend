@@ -12,7 +12,7 @@ export default function CtaBanner() {
         <p className="cta-banner__eyebrow">Begin Your Journey</p>
         <h2 className="cta-banner__title">
           Your Royal Event<br />
-          <em>Awaits at Raj Mahal</em>
+          <em>Awaits at Eventora</em>
         </h2>
         <p className="cta-banner__subtitle">
           Speak with our event specialists today. We respond within 24 hours and offer complimentary venue tours by appointment.

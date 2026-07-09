@@ -137,12 +137,12 @@ export default function Services() {
 
   return (
     <div>
-      <title>Our Services — Raj Mahal</title>
+      <title>Our Services — Eventora</title>
 
       {/* Page Hero */}
       <div className="page-hero">
         <div className="page-hero__bg">
-          <img src="/wedding_gallery.png" alt="Raj Mahal event services" />
+          <img src="/wedding_gallery.png" alt="Eventora event services" />
           <div className="page-hero__overlay" />
         </div>
         <div className="page-hero__content container">

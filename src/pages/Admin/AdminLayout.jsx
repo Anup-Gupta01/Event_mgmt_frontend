@@ -1,4 +1,4 @@
-import { useState } from 'react';
+ï»¿import { useState } from 'react';
 import { NavLink, Outlet, useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './Admin.css';
@@ -46,7 +46,7 @@ export default function AdminLayout() {
         <div className="adm-sidebar__brand">
           <div className="adm-sidebar__brand-icon">?</div>
           <div>
-            <div className="adm-sidebar__brand-name">Raj Mahal</div>
+            <div className="adm-sidebar__brand-name">Eventora</div>
             <div className="adm-sidebar__brand-tag">Admin Portal</div>
           </div>
         </div>
@@ -103,8 +103,8 @@ export default function AdminLayout() {
             >
               ?
             </button>
-            <div className="adm-topbar__title">Raj Mahal</div>
-            <span style={{ color: 'var(--clr-border)', fontSize: '1.2rem' }} className="adm-topbar__bread-arrow">›</span>
+            <div className="adm-topbar__title">Eventora</div>
+            <span style={{ color: 'var(--clr-border)', fontSize: '1.2rem' }} className="adm-topbar__bread-arrow">ï¿½</span>
             <div className="adm-topbar__breadcrumb">Admin Dashboard</div>
           </div>
 

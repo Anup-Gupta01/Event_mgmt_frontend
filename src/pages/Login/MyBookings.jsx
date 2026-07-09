@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+ï»¿import { useState, useEffect, useCallback } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
@@ -6,14 +6,14 @@ import './MyBookings.css';
 
 /* -- Helpers ------------------------------------------------------------------ */
 function formatDate(iso) {
-  if (!iso) return '—';
+  if (!iso) return 'ï¿½';
   return new Date(iso).toLocaleDateString('en-IN', {
     day: 'numeric', month: 'short', year: 'numeric',
   });
 }
 
 function formatPrice(n) {
-  if (!n && n !== 0) return '?—';
+  if (!n && n !== 0) return '?ï¿½';
   return '?' + Number(n).toLocaleString('en-IN');
 }
 
@@ -89,7 +89,7 @@ export default function MyBookings() {
     const bId = booking.bookingId || booking._id || booking.id || 'N/A';
     const content = [
       '-------------------------------------------',
-      '  RAJ MAHAL — EVENT BOOKING CONFIRMATION',
+      '  EVENTORA ï¿½ EVENT BOOKING CONFIRMATION',
       '-------------------------------------------',
       '',
       `Booking ID : ${bId}`,
@@ -104,8 +104,8 @@ export default function MyBookings() {
       '',
       booking.adminNotes ? `Admin Update:\n${booking.adminNotes}` : '',
       '-------------------------------------------',
-      'Raj Mahal Palace · Jaipur, Rajasthan',
-      'events@rajmahal.com · +91 141 400 1947',
+      'EVENTORA Palace ï¿½ Jaipur, Rajasthan',
+      'events@rajmahal.com ï¿½ +91 141 400 1947',
       '-------------------------------------------',
     ].join('\n');
 
@@ -127,7 +127,7 @@ export default function MyBookings() {
           <Link to="/" className="mb-brand">
             <span className="mb-brand__icon">?</span>
             <div>
-              <div className="mb-brand__name">Raj Mahal</div>
+              <div className="mb-brand__name">EVENTORA</div>
               <div className="mb-brand__sub">Client Portal</div>
             </div>
           </Link>
@@ -172,7 +172,7 @@ export default function MyBookings() {
         <div className="mb-page-header">
           <div>
             <h1 className="mb-page-title">My Bookings</h1>
-            <p className="mb-page-sub">Track and manage all your event reservations at Raj Mahal</p>
+            <p className="mb-page-sub">Track and manage all your event reservations at EVENTORA</p>
           </div>
           <Link to="/booking" className="mb-cta-btn" id="new-booking-cta">
             + New Booking
@@ -200,7 +200,7 @@ export default function MyBookings() {
                 {s.icon}
               </div>
               <div className="mb-stat-card__body">
-                <div className="mb-stat-card__value" style={{ color: s.color }}>{loading ? '…' : s.value}</div>
+                <div className="mb-stat-card__value" style={{ color: s.color }}>{loading ? 'ï¿½' : s.value}</div>
                 <div className="mb-stat-card__label">{s.label}</div>
               </div>
               <div className="mb-stat-card__bar" style={{ background: s.color }} />
@@ -235,7 +235,7 @@ export default function MyBookings() {
           {loading ? (
             <div className="mb-empty">
               <div className="mb-empty__icon">?</div>
-              <p className="mb-empty__title">Loading your bookings…</p>
+              <p className="mb-empty__title">Loading your bookingsï¿½</p>
             </div>
           ) : filtered.length === 0 ? (
             <div className="mb-empty">
@@ -294,7 +294,7 @@ export default function MyBookings() {
                       </div>
                       <div className="mb-card__field">
                         <span className="mb-card__field-lbl">Guests</span>
-                        <span className="mb-card__field-val">{booking.guestRange || '—'}</span>
+                        <span className="mb-card__field-val">{booking.guestRange || 'ï¿½'}</span>
                       </div>
                     </div>
 
@@ -415,7 +415,7 @@ export default function MyBookings() {
           <div className="mb-help-banner__icon">??</div>
           <div>
             <div className="mb-help-banner__title">Need assistance with your booking?</div>
-            <div className="mb-help-banner__sub">Our dedicated events team is available Mon–Sat, 9 AM – 7 PM IST</div>
+            <div className="mb-help-banner__sub">Our dedicated events team is available Monï¿½Sat, 9 AM ï¿½ 7 PM IST</div>
           </div>
           <div className="mb-help-banner__actions">
             <a href="tel:+911414001947" className="mb-help-btn mb-help-btn--outline">?? Call Us</a>

@@ -6,7 +6,7 @@ export default function Hero() {
     <section className="hero" id="hero" aria-label="Hero">
       {/* Background image */}
       <div className="hero__bg">
-        <img src="/hero_palace.png" alt="Raj Mahal Palace exterior at golden hour" className="hero__bg-img" />
+        <img src="/hero_palace.png" alt="Eventora venue exterior at golden hour" className="hero__bg-img" />
         <div className="hero__overlay" />
         <div className="hero__gradient" />
       </div>

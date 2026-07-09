@@ -17,7 +17,7 @@ const FALLBACK_VENUES = {
   'darbar-hall': {
     name: 'Darbar Hall', category: 'Grand Ballroom', capacity: 800, area: '12,000 sq ft',
     pricePerDay: 250000,
-    description: 'The grandest hall of Raj Mahal — adorned with hand-carved marble pillars, Rajputana frescoes, and a 40-foot gold-leaf ceiling. Perfect for grand royal weddings and state banquets.',
+    description: 'The grandest hall at Eventora — adorned with hand-carved marble pillars, Rajputana frescoes, and a 40-foot gold-leaf ceiling. Perfect for grand weddings and state banquets.',
     features: ['Marble flooring', 'Gold-leaf ceiling', '5-ton chandelier', 'In-built stage', 'Green room', 'Pre-function lawn'],
     amenities: ['Wi-Fi', 'Air-conditioning', 'Valet parking', 'In-house catering', 'AV system', 'Bridal suite'],
   },

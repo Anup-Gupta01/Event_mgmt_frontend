@@ -9,7 +9,7 @@ const awards = [
 ];
 
 const team = [
-  { name: 'Vikramaditya Singh', role: 'Managing Director', note: '3rd generation custodian of Raj Mahal' },
+  { name: 'Vikramaditya Singh', role: 'Managing Director', note: '3rd generation custodian of the venue' },
   { name: 'Reema Chaturvedi', role: 'Director, Events', note: '22 years in luxury event design' },
   { name: 'Chef Harpal Arora', role: 'Executive Chef', note: 'Formerly Oberoi, Taj; Michelin-trained' },
   { name: 'Priya Khandelwal', role: 'Head, Guest Relations', note: 'Fluent in 4 languages, 10+ years' },
@@ -21,12 +21,12 @@ export default function About() {
       {/* Page hero */}
       <div className="page-hero">
         <div className="page-hero__bg">
-          <img src="/hero_palace.png" alt="Raj Mahal Palace exterior" />
+          <img src="/hero_palace.png" alt="Eventora venue exterior" />
           <div className="page-hero__overlay" />
         </div>
         <div className="page-hero__content container">
           <p className="page-hero__eyebrow">Our Heritage</p>
-          <h1 className="page-hero__title">The Story of<br /><em>Raj Mahal</em></h1>
+          <h1 className="page-hero__title">The Story of<br /><em>Eventora</em></h1>
           <nav aria-label="Breadcrumb" className="breadcrumb">
             <Link to="/">Home</Link> <span>/</span> <span>About</span>
           </nav>
@@ -42,10 +42,10 @@ export default function About() {
               <h2 className="section-title">A Legacy of <em>Grandeur</em></h2>
               <div className="divider divider--left" />
               <p className="about-body">
-                Raj Mahal began its journey as the private guest palace of the Maharaja of Pratapgarh, built in 1947 during the twilight of the Rajputana era. Constructed by master craftsmen over 11 years, every arch, fresco, and marble inlay tells a story of a golden age.
+                Eventora began its journey as a premier hospitality and event destination, built to the highest standards of craftsmanship and elegance. Every arch, fresco, and marble inlay tells a story of meticulous artistry and dedication to excellence.
               </p>
               <p className="about-body">
-                In 1978, the Singh family — descendants of the original royal household — opened the palace gates to the public, transforming this architectural wonder into Jaipur's most celebrated event destination. Today, under the stewardship of Managing Director Vikramaditya Singh, Raj Mahal seamlessly blends royal heritage with world-class modern hospitality.
+                Over the decades, Eventora has evolved from an exclusive private estate into one of the region's most celebrated event destinations. Today, under the stewardship of Managing Director Vikramaditya Singh, Eventora seamlessly blends heritage architecture with world-class modern hospitality.
               </p>
               <p className="about-body">
                 Spanning 3.2 acres in the heritage quarter of Jaipur, the palace complex includes four distinct event venues, a heritage orchid garden, a royal culinary kitchen, and 24 heritage suites — all maintained to the exacting standards of a five-star luxury property.
@@ -126,7 +126,7 @@ export default function About() {
       <section className="about-cta">
         <div className="container" style={{ textAlign: 'center' }}>
           <h2 className="section-title" style={{ color: '#fff', marginBottom: 'var(--sp-4)' }}>
-            Ready to <em style={{ color: 'var(--clr-gold-lt)' }}>Experience Raj Mahal?</em>
+            Ready to <em style={{ color: 'var(--clr-gold-lt)' }}>Experience Eventora?</em>
           </h2>
           <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: 'var(--sp-8)', maxWidth: '50ch', margin: '0 auto var(--sp-8)' }}>
             Schedule a complimentary palace tour with our events team.

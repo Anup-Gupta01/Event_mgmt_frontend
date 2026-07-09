@@ -4,8 +4,8 @@ import './Testimonials.css';
 
 
 const fallback = [
-  { id:'1', name:'Priya & Rohan Mehta', event:'Wedding — Darbar Hall', rating:5, text:'Raj Mahal turned our wedding into a fairy tale. Every pillar, every flower, every moment was curated to perfection. Our guests still talk about it six months later.', location:'Mumbai' },
-  { id:'2', name:'Arvind Kapoor', event:'Corporate Gala — Maharani Suite', rating:5, text:'We have hosted our annual awards dinner at Raj Mahal for three consecutive years. The professionalism, the food, and the ambience are consistently world-class.', location:'Delhi' },
+  { id:'1', name:'Priya & Rohan Mehta', event:'Wedding — Darbar Hall', rating:5, text:'Eventora turned our wedding into a fairy tale. Every pillar, every flower, every moment was curated to perfection. Our guests still talk about it six months later.', location:'Mumbai' },
+  { id:'2', name:'Arvind Kapoor', event:'Corporate Gala — Maharani Suite', rating:5, text:'We have hosted our annual awards dinner at Eventora for three consecutive years. The professionalism, the food, and the ambience are consistently world-class.', location:'Delhi' },
   { id:'3', name:'Sunita & Deepak Sharma', event:'Anniversary — Jasmine Pavilion', rating:5, text:'The jasmine garden and that soft golden lighting — it felt like we stepped into a Mughal miniature painting. An evening we will treasure forever.', location:'Jaipur' },
   { id:'4', name:'Neha Agarwal', event:"Birthday Soirée — Rooftop Terrace", rating:5, text:'The rooftop under the stars with the city glowing below — absolutely magical. Every detail from the bar setup to the live music was handled flawlessly.', location:'Udaipur' },
 ];

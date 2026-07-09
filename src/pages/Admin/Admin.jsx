@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { Link } from 'react-router-dom';
 import './Admin.css';
@@ -63,7 +63,7 @@ export default function Admin() {
         <div className="admin-nav__logo">
           <span className="admin-nav__icon">✦</span>
           <div>
-            <p className="admin-nav__title">Raj Mahal</p>
+            <p className="admin-nav__title">Eventora</p>
             <p className="admin-nav__sub">Admin Portal</p>
           </div>
         </div>

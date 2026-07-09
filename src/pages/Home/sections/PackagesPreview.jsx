@@ -27,7 +27,7 @@ const packages = [
   {
     id: 'royal',
     name: 'Royal',
-    subtitle: 'The Raj Mahal Experience',
+    subtitle: 'The Eventora Experience',
     price: '₹9.5 Lakh',
     capacity: 'Up to 1000 guests',
     duration: '24 hours',

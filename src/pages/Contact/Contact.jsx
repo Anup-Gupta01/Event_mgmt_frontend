@@ -12,7 +12,7 @@ const contactInfo = [
   {
     icon: '📍',
     label: 'Our Address',
-    lines: ['Raj Mahal Palace & Events', 'Palace Road, Near City Palace', 'Jaipur, Rajasthan — 302 001'],
+    lines: ['Eventora Events', 'Palace Road, Near City Palace', 'Jaipur, Rajasthan — 302 001'],
   },
   {
     icon: '📞',
@@ -30,8 +30,8 @@ const contactInfo = [
   {
     icon: '✉️',
     label: 'Email',
-    lines: ['events@rajmahal.in'],
-    href: 'mailto:events@rajmahal.in',
+    lines: ['events@eventora.in'],
+    href: 'mailto:events@eventora.in',
   },
   {
     icon: '🕐',
@@ -69,12 +69,12 @@ export default function Contact() {
 
   return (
     <div>
-      <title>Contact Us — Raj Mahal</title>
+      <title>Contact Us — Eventora</title>
 
       {/* Hero */}
       <div className="page-hero">
         <div className="page-hero__bg">
-          <img src="/hero_palace.png" alt="Raj Mahal" />
+          <img src="/hero_palace.png" alt="Eventora venue" />
           <div className="page-hero__overlay" />
         </div>
         <div className="page-hero__content container">
@@ -98,8 +98,8 @@ export default function Contact() {
               <span>💬</span> <span>WhatsApp Us</span>
             </a>
             <div className="contact-quick-bar__sep" />
-            <a href="mailto:events@rajmahal.in" className="contact-quick-bar__item">
-              <span>✉️</span> <span>events@rajmahal.in</span>
+            <a href="mailto:events@eventora.in" className="contact-quick-bar__item">
+              <span>✉️</span> <span>events@eventora.in</span>
             </a>
             <div className="contact-quick-bar__sep" />
             <span className="contact-quick-bar__item contact-quick-bar__item--hours">

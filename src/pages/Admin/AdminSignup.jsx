@@ -1,4 +1,4 @@
-import { useState } from 'react';
+ï»¿import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
@@ -43,7 +43,7 @@ export default function AdminSignup() {
 
       login(data); // store token + user
       setStatus('success');
-      setMessage('Admin account created! Redirecting to dashboard…');
+      setMessage('Admin account created! Redirecting to dashboardï¿½');
       setTimeout(() => navigate('/admin/dashboard', { replace: true }), 1200);
     } catch (err) {
       setStatus('error');
@@ -61,8 +61,8 @@ export default function AdminSignup() {
         <div className="al-brand">
           <div className="al-brand__icon">?</div>
           <div>
-            <div className="al-brand__name">Raj Mahal</div>
-            <div className="al-brand__sub">Est. 1947 · Jaipur</div>
+            <div className="al-brand__name">Eventora</div>
+            <div className="al-brand__sub">Est. 1947 ï¿½ Jaipur</div>
           </div>
         </div>
 
@@ -210,7 +210,7 @@ export default function AdminSignup() {
             disabled={status === 'loading'}
           >
             {status === 'loading' ? (
-              <><span className="al-spinner" /> Creating account…</>
+              <><span className="al-spinner" /> Creating accountï¿½</>
             ) : 'Create Admin Account ?'}
           </button>
         </form>

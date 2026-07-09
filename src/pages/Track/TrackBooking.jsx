@@ -56,12 +56,12 @@ export default function TrackBooking() {
 
   return (
     <div>
-      <title>Track Your Booking — Raj Mahal</title>
+      <title>Track Your Booking — Eventora</title>
 
       {/* Page hero */}
       <div className="page-hero" style={{ minHeight: '260px', height: '34vh' }}>
         <div className="page-hero__bg">
-          <img src="/hero_palace.png" alt="Raj Mahal Palace" />
+          <img src="/hero_palace.png" alt="Eventora venue" />
           <div className="page-hero__overlay" />
         </div>
         <div className="page-hero__content container">
@@ -259,7 +259,7 @@ export default function TrackBooking() {
                       <div className="track-admin-note">
                         <div className="track-admin-note__head">
                           <span>✦</span>
-                          <span>Message from Raj Mahal Team</span>
+                          <span>Message from Eventora Team</span>
                         </div>
                         <p className="track-admin-note__text">{booking.adminNotes}</p>
                       </div>

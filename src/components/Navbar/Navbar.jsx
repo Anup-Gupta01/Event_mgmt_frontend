@@ -36,8 +36,8 @@ export default function Navbar() {
         <Link to="/" className="navbar__logo">
           <span className="navbar__logo-icon">✦</span>
           <div className="navbar__logo-text">
-            <span className="navbar__logo-main">Raj Mahal</span>
-            <span className="navbar__logo-sub">Est. 1947 · Jaipur</span>
+            <span className="navbar__logo-main">EVENTORA</span>
+            <span className="navbar__logo-sub">Events, beautifully managed.</span>
           </div>
         </Link>
 

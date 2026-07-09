@@ -1,4 +1,4 @@
-import { useState } from 'react';
+ï»¿import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
@@ -36,7 +36,7 @@ export default function Login() {
 
       login(data); // stores token + user in context + localStorage
       setStatus('success');
-      setMessage('Welcome back! Redirecting to your portal…');
+      setMessage('Welcome back! Redirecting to your portalï¿½');
       setTimeout(() => navigate('/my-bookings'), 1000);
     } catch (err) {
       setStatus('error');
@@ -65,7 +65,7 @@ export default function Login() {
 
       login(data); // auto-login after registration
       setStatus('success');
-      setMessage('Account created! Redirecting to your portal…');
+      setMessage('Account created! Redirecting to your portalï¿½');
       setTimeout(() => navigate('/my-bookings'), 1000);
     } catch (err) {
       setStatus('error');
@@ -82,13 +82,13 @@ export default function Login() {
       <div className="lp-orb lp-orb--2" />
 
       <div className="lp-card">
-        {/* Card header — logo + title */}
+        {/* Card header ï¿½ logo + title */}
         <div className="lp-header">
           <Link to="/" className="lp-logo">
             <span className="lp-logo__icon">?</span>
             <div>
-              <div className="lp-logo__name">Raj Mahal</div>
-              <div className="lp-logo__sub">Est. 1947 · Jaipur</div>
+              <div className="lp-logo__name">EVENTORA</div>
+              <div className="lp-logo__sub">Events, beautifully managed.</div>
             </div>
           </Link>
           <div className="lp-divider" />
@@ -159,7 +159,7 @@ export default function Login() {
                   id="login-pass"
                   type={showLoginPass ? 'text' : 'password'}
                   className="form-input lp-input"
-                  placeholder="••••••••"
+                  placeholder="ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
                   value={loginForm.password}
                   onChange={(e) => setLoginForm(f => ({ ...f, password: e.target.value }))}
                   required
@@ -196,7 +196,7 @@ export default function Login() {
               disabled={status === 'loading'}
             >
               {status === 'loading' && tab === 'login' ? (
-                <><span className="lp-spinner" /> Signing in…</>
+                <><span className="lp-spinner" /> Signing inï¿½</>
               ) : 'Sign In ?'}
             </button>
 
@@ -300,7 +300,7 @@ export default function Login() {
               disabled={status === 'loading'}
             >
               {status === 'loading' && tab === 'register' ? (
-                <><span className="lp-spinner" /> Creating account…</>
+                <><span className="lp-spinner" /> Creating accountï¿½</>
               ) : 'Create Account ?'}
             </button>
 
@@ -316,7 +316,7 @@ export default function Login() {
         {/* Footer links */}
         <div className="lp-footer">
           <Link to="/" className="lp-footer__link">? Back to website</Link>
-          <span className="lp-footer__sep">·</span>
+          <span className="lp-footer__sep">ï¿½</span>
           <Link to="/admin/login" className="lp-footer__link lp-footer__link--admin">Admin Portal</Link>
         </div>
       </div>

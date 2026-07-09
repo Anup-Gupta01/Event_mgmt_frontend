@@ -14,7 +14,7 @@ const fallback = [
     area: '12,000 sq ft',
     category: 'Grand Ballroom',
     tagline: "Jaipur's Most Iconic Grand Hall",
-    description: 'The grandest hall of Raj Mahal — adorned with hand-carved marble pillars, Rajputana frescoes, and a 40-foot gold-leaf ceiling. Perfect for grand royal weddings and state banquets. The hall features an in-built raised stage and two private green rooms for performers.',
+    description: 'The grandest hall at Eventora — adorned with hand-carved marble pillars, Rajputana frescoes, and a 40-foot gold-leaf ceiling. Perfect for grand weddings and state banquets. The hall features an in-built raised stage and two private green rooms for performers.',
     features: ['Marble flooring', 'Gold-leaf ceiling', '5-ton chandelier', 'In-built stage', 'Green room', 'Pre-function lawn'],
     facilities: ['Wi-Fi', 'Air-conditioning', 'Valet parking', 'In-house catering', 'AV system', 'Bridal suite'],
     pricePerDay: 250000,
@@ -103,12 +103,12 @@ export default function Venues() {
 
   return (
     <div>
-      <title>Venues — Raj Mahal</title>
+      <title>Venues — Eventora</title>
 
       {/* Page hero */}
       <div className="page-hero">
         <div className="page-hero__bg">
-          <img src="/hero_palace.png" alt="Raj Mahal palace" />
+          <img src="/hero_palace.png" alt="Eventora venue" />
           <div className="page-hero__overlay" />
         </div>
         <div className="page-hero__content container">
@@ -127,7 +127,7 @@ export default function Venues() {
           <h2 className="section-title">Four Extraordinary <em>Venues</em></h2>
           <div className="divider" />
           <p className="section-subtitle">
-            Each space in Raj Mahal carries centuries of heritage — from a 12,000 sq ft palatial ballroom to an intimate suite with private garden access.
+            Each space at Eventora carries its own character — from a 12,000 sq ft palatial ballroom to an intimate suite with private garden access.
           </p>
         </div>
       </section>
